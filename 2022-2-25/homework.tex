@@ -151,10 +151,94 @@
 \tableofcontents
  
 \newpage
+\begin{spacing}{1.2}
 %%%%%%%%%%%%%%%%%
 
-\section{准备食物}
+\section{题1.2}
 
+\section{题1.5}
+
+$FindMax(A)$算法每一行执行的次数如表\ref{tbl:p15}
+
+\begin{table}[h]
+	\renewcommand{\arraystretch}{1.2}
+	\caption{执行一行的次数}
+	\label{tbl:p15}
+	\begin{center}
+		{\footnotesize
+			\begin{tabular}{c l}
+				\toprule
+				{花费} & {次数} \\
+				\midrule
+				$c_1$ & 1 \\
+				\hline
+				$c_3$ & n-1 \\
+				\hline
+				$c_4$ & $\Sigma_{j=2}^{n}t_j$ \\
+				\hline
+				$c_5$ & 1 \\
+				\bottomrule
+		\end{tabular}}
+	\end{center}
+\end{table}
+
+其中$t_j$为
+
+$$ t_j=\left\{
+\begin{aligned}
+	1 & \  \mbox{当for循环的第j轮中if条件成立} \\
+	0 & \  \mbox{当for循环的第j轮中if条件不成立} \\
+\end{aligned}
+\right.
+$$
+
+则算法运行所需要的时间为
+
+\begin{equation}
+T(n)=c_1 + c_3 \times (n-1) + c_4 \times \Sigma_{j=2}^{n}t_j + c_5 \label{eqn:tn15}
+\end{equation}
+
+当$A$中的最大值的位置在末尾时，\eqref{eqn:tn15}中$t_j$满足
+
+$$
+t_2=\dots=t_n=1
+$$
+
+此时$T(n)$最大，最大值为
+
+\begin{align*}
+T(n) & =c_1 + c_3 \times (n-1) + c_4 \times (n-2) + c_5 \\
+& = c_1 - c_3 - 2 \times c_4 +c_5 + (c_3+c_4) \times n  
+\end{align*}
+
+则$FindMax(A)$的时间复杂度为
+$$
+O(n)
+$$
+
+\section{题1.6}
+
+\section{题1.7}
+
+\section{题1.8}
+
+\section{题1.9}
+
+\section{题1.10}
+
+\section{题1.11}
+若插入排序的效率高于归并排序，则有
+\begin{align*}
+	8n^2 \le 64n \log n
+\end{align*}
+
+解得
+
+\begin{align*}
+	n = 6.5070996729820298949891210615877
+\end{align*}
+
+则当$n$取$1,2,3,4,5,6$时插入排序的效率高于归并排序.
 
 %%%%%%%%%%%%%%%%%
 \newpage
