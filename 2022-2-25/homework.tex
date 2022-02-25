@@ -158,6 +158,18 @@
 
 \section{题1.2}
 
+该算法符合算法的特点。
+
+\begin{enumerate}
+	\item \textbf{有穷性：}又穷集合有有穷个数的子集，遍历这些子集求和并判断就有有限步。因此算法能在有穷操作内完成
+	
+	\item \textbf{可行性：}求出子集可以用回溯算法实现，是可行的
+	
+	\item \textbf{确定性：}该算法的每一步是确定的
+	
+	\item \textbf{输入、输出：}该算法输入一个整数集和一个数，输出所有和为该数的子集
+\end{enumerate}
+
 \section{题1.5}
 
 $FindMax(A)$算法每一行执行的次数如表\ref{tbl:p15}
@@ -226,11 +238,12 @@ $$
 L_j: \mbox{在$for$循环的第$j$个迭代执行前，$max$中有A[$1 \dots j-1$]中的最大值}
 $$
 
-\textbf{初始步：} 在循环开始前，$max=A[1]$是$A$中的最大值，$L_1$为真；
+\textbf{初始步：} 在循环开始前$j=2$，$max=A[1]$是$A[1 \dots 1]$中的最大值，$L_2$为真；
 
-\textbf{归纳步：} 如果在循环的第$k$个迭代前$L_{k-1}$为真，则max有$A[1 \dots j-1]$中的最大值，当执行迭代$j=k$时，若$A[k] > max$则令$max=A[k]$。此时$max$有$A[1 \dots j]$中的最大值。在下一迭代开始前，$L_k$为真；
+\textbf{归纳步：} 如果在循环的第$k$个迭代前$L_{k}$为真，则max有$A[1 \dots k-1]$中的最大值，当执行迭代$k$时，若$A[k] > max$则令$max=A[k]$。此时$max$有$A[1 \dots k]$中的最大值。在下一迭代开始前，$L_k$为真；
 
-\textbf{终止步：} 此时$j=n+1$，由第二步的保证，$L_n$为真，则$max$有$A[1 \dots n]$中的最大值。对于任意输入$A$，此$FindMax(A)$都有一个正确的输出。因此$FindMax(A)$是正确的。
+\textbf{终止步：} 此时$j=n+1$，由第二步的保证，则$max$有$A[1 \dots n]$中的最大值。
+对于任意输入$A$，此$FindMax(A)$都有一个正确的输出。因此$FindMax(A)$是正确的。
 
 \section{题1.7}
 
@@ -252,7 +265,99 @@ $$
 
 \section{题1.8}
 
+$Exp(a,n)$有循环不变式$L_i$
+
+$$
+L_i: \mbox{在$while$循环的第$i$个迭代执行前，$pow$中有$a^{i-1}$}
+$$
+
+\textbf{初始步：}在循环开始前$i=1$，$pow=1=a^0=a^{i-1}$，$L_i$为真；
+
+\textbf{归纳步：}如果在循环的第$k$个迭代前$L_{k}$为真，则$pow=a^{k-1}$，当执行迭代$k时$令$pow \gets pow \times a$，此时$pow=a^{k}$。在下一迭代开始前，$L_k$为真；
+
+\textbf{终止步：}此时$i=n+1$，由第二步的保证，则$pow=a^{n}$
+对于任意输入$(a,n)$，此$Exp(a,n)$都有一个正确的输出。因此$Exp(a,n)$是正确的。
 \section{题1.9}
+
+\subsection{算法}
+
+\begin{algorithm}
+	\caption{查找指定定值x，返回下标}
+	\begin{algorithmic}[1]
+		\Procedure{Find}{$A,x$}     
+		\State $idx \gets 0$
+		
+		\For{$j \gets 1$  to $n$}
+		\If{$A[j]==x$}
+		\State $idx \gets j$
+		\State break
+		\EndIf
+		\EndFor
+		
+		\Return idx
+		\EndProcedure
+		
+	\end{algorithmic}
+\end{algorithm}
+
+该算法在没找到$x$时返回0.
+
+\subsection{正确性}
+
+$Find(A,x)$有循环不变量$L_j$
+
+$$
+L_j: \mbox{在$for$循环的第$j$个迭代执行前，$idx$中有$A[1 \dots j-1]$中等于$x$的下标}
+$$
+
+\textbf{初始步：} 在循环开始前$j=1$，$max=A[1]$是$A[1 \dots 0]$中等于$x$的下标，$L_1$为真；
+
+\textbf{归纳步：} 如果在循环的第$k$个迭代前$L_{k}$为真，则max有$A[1 \dots k-1]$中等于$x$值，当执行迭代$k$时，若$A[k] == x$则令$idx=k$。此时$max$有$A[1 \dots k]$中等于$x$值。在下一迭代开始前，$L_k$为真；
+
+\textbf{终止步：} 此时$j=n+1$，由第二步的保证，则$max$有$A[1 \dots n]$中的中等于$x$值。
+对于任意输入$A$，此$Find(A,x)$都有一个正确的输出。因此$Find(A,x)$是正确的。
+
+\subsection{时间复杂度}
+$Find(A,x)$算法每一行执行的次数如表\ref{tbl:p19}
+\begin{table}[h]
+	\renewcommand{\arraystretch}{1.2}
+	\caption{执行每一行的次数}
+	\label{tbl:p19}
+	\begin{center}
+		{\footnotesize
+			\begin{tabular}{c l}
+				\toprule
+				{花费} & {次数} \\
+				\midrule
+				$c_1$ & 1 \\
+				\hline
+				$c_2$ & $t$ \\
+				\hline
+				$c_3$ & $t-1$ \\
+				\hline
+				$c_4$ & $t-1$ \\
+				\hline
+				$c_5$ & 1 \\
+				\bottomrule
+		\end{tabular}}
+	\end{center}
+\end{table}
+
+
+则算法运行所需要的时间为
+
+\begin{equation}
+	T(n)=c_1 + c_2 \times t + c_3 \times (t-1) + c_4 \times (t-1) + c_5 \label{eqn:tn19}
+\end{equation}
+
+当$x$位于末尾时$t$最大，$t=n+1$，则
+
+\begin{align*}
+	T(n)&=c_1 + c_2 \times (n+1) + c_3 \times n + c_4 \times n  + c_5 \\
+	&= (c_1+c_2+c_5)+(c_2+c_3+c_4) \times n
+\end{align*}
+
+该算法的最坏时间复杂度为$O(n)$
 
 \section{题1.10}
 
@@ -283,24 +388,5 @@ $$
 
 则当$n$取$1,2,3,4,5,6$时插入排序的效率高于归并排序.
 
-%%%%%%%%%%%%%%%%%
-\newpage
-\begin{thebibliography}{00}
-	
-	%% \bibitem{label}
-	%% Text of bibliographic item
-	
-	\bibitem{Pawar2012}
-	P.~Y.~Pawar and S.~H.~Gawande, ``A Comparative Study on Different Types of Approaches to Text Categorization,'' \textit{International Journal of Machine Learning and Computing}, vol. 2, no. 4, pp. 423-426, 2012.
-
-	
-\end{thebibliography}
-\addcontentsline{toc}{section}{引用}
-
-
-\addtocounter{page}{-1}
-\thispagestyle{empty}
-
-%%%%%%%%%%%%%%%%%
 \end{spacing}
 \end{document}
