@@ -22,10 +22,12 @@
 \usepackage{epsfig}
 \usepackage{float}
 
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+
 \usepackage{booktabs}
 \usepackage{threeparttable}
 \usepackage{longtable}
-\usepackage[ruled,linesnumbered]{algorithm2e}
 \usepackage{listings}
 
 % cite package, to clean up citations in the main text. Do not remove.
@@ -218,13 +220,54 @@ $$
 
 \section{题1.6}
 
+$FindMax(A)$有循环不变量$L_j$
+
+$$
+L_j: \mbox{在$for$循环的第$j$个迭代执行前，$max$中有A[$1 \dots j-1$]中的最大值}
+$$
+
+\textbf{初始步：} 在循环开始前，$max=A[1]$是$A$中的最大值，$L_1$为真；
+
+\textbf{归纳步：} 如果在循环的第$k$个迭代前$L_{k-1}$为真，则max有$A[1 \dots j-1]$中的最大值，当执行迭代$j=k$时，若$A[k] > max$则令$max=A[k]$。此时$max$有$A[1 \dots j]$中的最大值。在下一迭代开始前，$L_k$为真；
+
+\textbf{终止步：} 此时$j=n+1$，由第二步的保证，$L_n$为真，则$max$有$A[1 \dots n]$中的最大值。对于任意输入$A$，此$FindMax(A)$都有一个正确的输出。因此$FindMax(A)$是正确的。
+
 \section{题1.7}
+
+\begin{algorithm}
+	\caption{查找最大值，返回下标}
+	\begin{algorithmic}[1]
+		\Procedure{FindMax}{$A$}     
+		\State $max \gets 1$
+		\For{$j \gets 2$  to $n$}
+		\If{$A[j]>A[max]$}
+		\State $max \gets j$
+		\EndIf
+		\EndFor
+		\Return max
+		\EndProcedure
+		
+	\end{algorithmic}
+\end{algorithm}
 
 \section{题1.8}
 
 \section{题1.9}
 
 \section{题1.10}
+
+若前者比后者快，则有
+$$
+100n^2 \le 2^n
+$$
+
+解得
+
+$$
+n \ge 14.324727836998200633849297216651
+$$
+
+则从$n=15$前者比后者快.
 
 \section{题1.11}
 若插入排序的效率高于归并排序，则有
@@ -235,7 +278,7 @@ $$
 解得
 
 \begin{align*}
-	n = 6.5070996729820298949891210615877
+	n \le 6.5070996729820298949891210615877
 \end{align*}
 
 则当$n$取$1,2,3,4,5,6$时插入排序的效率高于归并排序.
