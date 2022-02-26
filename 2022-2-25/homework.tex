@@ -388,5 +388,96 @@ $$
 
 则当$n$取$1,2,3,4,5,6$时插入排序的效率高于归并排序。
 
+\section{题2.2}
+由$\max$的定义
+
+\begin{align*}
+	f(x) \le \max (f(x),g(x)) \\
+	g(x) \le \max (f(x),g(x)) 
+\end{align*}
+
+则
+
+$$
+f(x)+g(x) \le 2 \max (f(x),g(x))
+$$
+
+则有
+
+$$
+\max (f(x),g(x)) \ge \frac{f(x)+g(x)}{2}
+$$
+
+即
+
+\begin{equation}
+	\max (f(x),g(x)) = \Omega (f(x),g(x)) \label{p22theta}
+\end{equation}
+
+由非负性
+
+$$
+\max (f(x),g(x)) \le f(x)+g(x) 
+$$
+
+即
+
+\begin{equation}
+	\max (f(x),g(x)) = O (f(x)+g(x)) \label{eqn:p22o}
+\end{equation}
+
+由\eqref{p22theta}和\eqref{eqn:p22o}可得
+
+
+$$
+\max (f(x),g(x)) = \Theta (f(x)+g(x)) \label{eqn:p22o}
+$$
+
+\section{题2.9}
+
+\textbf{必要性：} 
+由$f(n)=\Theta(g(n))$得
+$$
+\lim_{n \to \infty}\frac{f(n)}{g(n)}=k, 0<k<\infty
+$$
+
+则由
+
+$$
+\lim_{n \to \infty}\frac{f(n)}{g(n)} \ne 0
+$$
+
+得$f(n)=\Omega(g(n))$，由
+
+$$
+\lim_{n \to \infty}\frac{f(n)}{g(n)} \ne \infty
+$$
+
+得$f(n)=O(g(n))$
+
+\textbf{充分性：}
+由$f(n)=O(g(n))$且$f(n)=\Omega(g(n))$得
+
+$$
+\lim_{n \to \infty}\frac{f(n)}{g(n)} \ne \infty
+$$
+
+且
+
+$$
+\lim_{n \to \infty}\frac{f(n)}{g(n)} \ne 0
+$$
+
+则$\exists k>0$且$k<\infty$使
+
+$$
+\lim_{n \to \infty}\frac{f(n)}{g(n)} = k
+$$
+
+则$f(n)=\Theta(g(n))$
+
+
+
+
 \end{spacing}
 \end{document}
