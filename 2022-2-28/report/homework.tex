@@ -1,0 +1,302 @@
+\documentclass[a4paper,twoside]{article}
+\usepackage{blindtext}  
+\usepackage{geometry}
+
+% Chinese support
+\usepackage[UTF8, scheme = plain]{ctex}
+
+% Page margin layout
+\geometry{left=2.3cm,right=2cm,top=2.5cm,bottom=2.0cm}
+
+
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{geometry}
+\usepackage{amsmath}
+\usepackage{float}
+\usepackage{hyperref}
+
+\usepackage{graphics}
+\usepackage{graphicx}
+\usepackage{subfigure}
+\usepackage{epsfig}
+\usepackage{float}
+
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+
+\usepackage{booktabs}
+\usepackage{threeparttable}
+\usepackage{longtable}
+\usepackage{listings}
+
+% cite package, to clean up citations in the main text. Do not remove.
+\usepackage{cite}
+
+\usepackage{color,xcolor}
+
+%% The amssymb package provides various useful mathematical symbols
+\usepackage{amssymb}
+%% The amsthm package provides extended theorem environments
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{enumerate}
+\usepackage{enumitem}
+\usepackage{listings}
+
+\usepackage{indentfirst}
+\setlength{\parindent}{2em} % Make two letter space in the first paragraph
+\usepackage{setspace}
+\linespread{1.5} % Line spacing setting
+\usepackage{siunitx}
+\setlength{\parskip}{0.5em} % Paragraph spacing setting
+
+\renewcommand{\figurename}{图}
+\renewcommand{\lstlistingname}{代码} 
+\renewcommand{\tablename}{表格}
+\renewcommand{\contentsname}{目录}
+\floatname{algorithm}{算法}
+
+\graphicspath{ {images/} }
+
+%%%%%%%%%%%%%
+\newcommand{\StudentNumber}{22920202204622}  % Fill your student number here
+\newcommand{\StudentName}{熊恪峥}  % Replace your name here
+\newcommand{\PaperTitle}{作业（二）}  % Change your paper title here
+\newcommand{\PaperType}{算法设计与分析} % Replace the type of your report here
+\newcommand{\Date}{2022年2月28日}
+\newcommand{\College}{信息学院}
+\newcommand{\CourseName}{算法设计与分析}
+%%%%%%%%%%%%%
+
+%% Page header and footer setting
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\pagestyle{fancy}
+\fancyhf{}
+% This requires the document to be twoside
+\fancyhead[LO]{\texttt{\StudentName }}
+\fancyhead[LE]{\texttt{\StudentNumber}}
+\fancyhead[C]{\texttt{\PaperTitle }}
+\fancyhead[R]{\texttt{第{\thepage}页，共\pageref*{LastPage}页}}
+
+
+\title{\PaperTitle}
+\author{\StudentName}
+\date{\Date}
+
+\lstset{
+	basicstyle          =   \sffamily,          % 基本代码风格
+	keywordstyle        =   \bfseries,          % 关键字风格
+	commentstyle        =   \rmfamily\itshape,  % 注释的风格，斜体
+	stringstyle         =   \ttfamily,  % 字符串风格
+	flexiblecolumns,                % 别问为什么，加上这个
+	numbers             =   left,   % 行号的位置在左边
+	showspaces          =   false,  % 是否显示空格，显示了有点乱，所以不现实了
+	numberstyle         =   \zihao{-5}\ttfamily,    % 行号的样式，小五号，tt等宽字体
+	showstringspaces    =   false,
+	captionpos          =   t,      % 这段代码的名字所呈现的位置，t指的是top上面
+	frame               =   lrtb,   % 显示边框
+}
+
+\lstdefinestyle{PythonStyle}{
+	language        =   Python, % 语言选Python
+	basicstyle      =   \zihao{-5}\ttfamily,
+	numberstyle     =   \zihao{-5}\ttfamily,
+	keywordstyle    =   \color{blue},
+	keywordstyle    =   [2] \color{teal},
+	stringstyle     =   \color{magenta},
+	commentstyle    =   \color{red}\ttfamily,
+	breaklines      =   true,   % 自动换行，建议不要写太长的行
+	columns         =   fixed,  % 如果不加这一句，字间距就不固定，很丑，必须加
+	basewidth       =   0.5em,
+}
+
+\begin{document}
+	
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\makeatletter % change default title style
+\renewcommand*\maketitle{%
+	\begin{center} 
+		\bfseries  % title 
+		{\LARGE \@title \par}  % LARGE typesetting
+		\vskip 1em  %  margin 1em
+		{\global\let\author\@empty}  % no author information
+		{\global\let\date\@empty}  % no date
+		\thispagestyle{empty}   %  empty page style
+	\end{center}%
+	\setcounter{footnote}{0}%
+}
+\makeatother
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	
+	
+\thispagestyle{empty}
+
+\vspace*{1cm}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=4.0cm]{logo.png}
+\end{figure}
+
+\vspace*{1cm}
+
+\begin{center}
+	\Huge{\textbf{\PaperType}}
+	
+	\Large{\PaperTitle}
+\end{center}
+
+\vspace*{1cm}
+
+\begin{table}[h]
+	\centering	
+	\begin{Large}
+		\renewcommand{\arraystretch}{1.5}
+		\begin{tabular}{p{3cm} p{5cm}<{\centering}}
+			姓\qquad 名 & \StudentName  \\
+			\hline
+			学\qquad号 & \StudentNumber \\
+			\hline
+			日\qquad期 & \Date  \\
+			\hline
+			学\qquad院 & \College  \\
+			\hline
+			课程名称 & \CourseName  \\
+			\hline
+		\end{tabular}
+	\end{Large}
+\end{table}
+
+\newpage
+
+\title{
+	\Large{\textcolor{black}{\PaperTitle}}
+}
+	
+	
+\maketitle
+	
+\tableofcontents
+ 
+\newpage
+\begin{spacing}{1.2}
+
+\section{题3.1}
+
+\textbf{正好雇佣一次}，则第一位面试的必须是最好的面试者。
+则
+$$
+P(\mbox{排在第$1$位的面试者是最好的面试者})=\frac{1}{n}
+$$
+
+\textbf{正好雇佣两次}，则已知排在第一位的人一定会被雇佣，最好的面试者一定会被雇佣。因此，第一位不能是最好的的面试者，否则只能被雇佣一次。则设事件
+
+$$
+E_i: \mbox{第一个来面试的人的排名是$i$}
+$$
+
+其中$i$满足
+
+$$
+i \le n-1
+$$
+
+则
+
+$$
+P(E_i)=\frac{1}{n}
+$$
+
+若第一个人的排名是$i$，只雇佣两个人要求第$2, 3 \dots ,j-1$个面试者排名都不如第一个面试者，即最好的人必须在排名是$i+1, i+2 \dots n-1, n$的人中第一个面试。设最好的人面试的次序是$j$，则事件
+
+$$
+F: \mbox{第$2, 3 \dots ,j-1$个面试者排名都不如第一个面试者}
+$$
+
+则
+
+\begin{align*}
+	\overbrace{i+1, i+2, \dots, n-1, n}^{\mbox{共$n-i$个人}} \\
+	\Rightarrow P(F|E_i) = \frac{1}{n-i} 
+\end{align*}
+
+注意到$E_1, \dots, E_{n-1}$是独立事件，则由全概率公式
+
+\begin{align*}
+	P(\mbox{恰好有两个人被雇佣}) &= \sum_{i=1}^{n-1}{P(F|E_i)\times P(E_i)} \\
+	&= \sum_{i=1}^{n-1}\frac{1}{n} \cdot \frac{1}{n-i} \\
+	&= \frac{1}{n}\sum_{i=1}^{n-1}\frac{1}{i} \\
+	&= O(\frac{\log n}{n})
+\end{align*}
+
+\textbf{正好雇佣$n$次}，则所有候选人按排名单调递增进行面试。总共有$n!$种排列，则概率为
+
+$$
+P(\mbox{恰好有$n$个人被雇佣})=\frac{1}{n!}
+$$
+
+\section{题3.2}
+
+$FindMax$算法如算法\ref{alg:findmax}
+
+\begin{algorithm}
+	\caption{查找最大值，返回下标}
+	\label{alg:findmax}
+	\begin{algorithmic}[1]
+		\Procedure{FindMax}{$A$}     
+		\State $max \gets 1$
+		\For{$j \gets 2$  to $n$}
+		\If{$A[j]>A[max]$}
+		\State $max \gets j$
+		\EndIf
+		\EndFor
+		\Return max
+		\EndProcedure
+		
+	\end{algorithmic}
+\end{algorithm}
+
+则$max$在位置$k$被赋予最大值时的概率为
+$$
+P=\frac{1}{n}
+$$
+
+如果$max=A[k]$则第$3$行的比较次数为$n-1$次，则平均的比较次数为
+
+\begin{align*}
+	T(n) &= \sum_{k=2}^{n}\frac{1}{n} \cdot k \\
+	&= \frac{1}{n} \cdot \frac{(2+n)(n-1)}{2} \\
+	&= \Theta(n)
+\end{align*}
+
+\section{题3.4}
+
+设运算$i$的开销为$c_i$
+
+$$ c_i=\left\{
+\begin{aligned}
+	i & \  \mbox{$i$为$2$的整数幂} \\
+	0 & \  \mbox{其它} \\
+\end{aligned}
+\right.
+$$
+
+则总开销为
+
+\begin{align*}
+	C &= \sum_{i=1}^{n}c_i \\
+	&= \sum_{i=1}^{\lfloor\ log_2 n \rfloor}2^i+(n-\lfloor\ log_2 n \rfloor) \\
+	&= (n-\lfloor\ log_2 n \rfloor) + 2(n-1)
+\end{align*}
+
+则平均一次运算的开销为
+
+$$
+\frac{C}{n} = 3+\frac{1}{n}+\frac{\lfloor\ log_2 n \rfloor}{n} = 3
+$$
+
+
+\end{spacing}
+\end{document}
