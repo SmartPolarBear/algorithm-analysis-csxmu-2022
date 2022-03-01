@@ -8,7 +8,9 @@ The reports and codes for the algorithm analysis and design course of XMU, 2022.
 
 
 
-The files for each homework are grouped by date. All reports are finished in LaTeX, which is compiled by **pdflatex**. Programs are implemented in Python or C++.
+The files for each homework are grouped by date. All reports are written in LaTeX, compiled by **pdflatex**. 
+
+Codes for programing problems are implemented in mainly Python 3 or C++.
 
 
 - [2022-2-25](https://github.com/SmartPolarBear/algorithm-analysis-csxmu-2022/tree/main/2022-2-25): Week1's homework report for Chapter 1,2.
