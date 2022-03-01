@@ -12,3 +12,4 @@ The files for each homework are grouped by date. All reports are finished in LaT
 
 
 - [2022-2-25](https://github.com/SmartPolarBear/algorithm-analysis-csxmu-2022/tree/main/2022-2-25): Week1's homework report for Chapter 1,2.
+- [2022-2-28](https://github.com/SmartPolarBear/algorithm-analysis-csxmu-2022/tree/main/2022-2-28): **(partial)** Week2's homework report for Chapter 3.

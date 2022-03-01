@@ -288,15 +288,21 @@ $$
 \begin{align*}
 	C &= \sum_{i=1}^{n}c_i \\
 	&= \sum_{i=1}^{\lfloor\ log_2 n \rfloor}2^i+(n-\lfloor\ log_2 n \rfloor) \\
-	&= (n-\lfloor\ log_2 n \rfloor) + 2(n-1)
+	&=  2(n-1) + (n-\lfloor\ log_2 n \rfloor)
 \end{align*}
 
 则平均一次运算的开销为
 
 $$
-\frac{C}{n} = 3+\frac{1}{n}+\frac{\lfloor\ log_2 n \rfloor}{n} = 3
+\frac{C}{n} = 3+\frac{1}{n}+\frac{\lfloor\ log_2 n \rfloor}{n} 
 $$
 
+当$n$较大时
+
+\begin{align*}
+	\lim_{n \to \infty}\frac{C}{n} &= 3+\lim_{n \to \infty}(\frac{1}{n}+\frac{\lfloor\ log_2 n \rfloor}{n}) \\
+	&=3
+\end{align*}
 
 \end{spacing}
 \end{document}
