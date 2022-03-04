@@ -182,6 +182,95 @@
  
 \newpage
 \begin{spacing}{1.2}
+	
+
+\section{题2.2}
+由$\max$的定义
+
+\begin{align*}
+	f(x) \le \max (f(x),g(x)) \\
+	g(x) \le \max (f(x),g(x)) 
+\end{align*}
+
+则
+
+$$
+f(x)+g(x) \le 2 \max (f(x),g(x))
+$$
+
+则有
+
+$$
+\max (f(x),g(x)) \ge \frac{f(x)+g(x)}{2}
+$$
+
+即
+
+\begin{equation}
+	\max (f(x),g(x)) = \Omega (f(x),g(x)) \label{p22theta}
+\end{equation}
+
+由非负性
+
+$$
+\max (f(x),g(x)) \le f(x)+g(x) 
+$$
+
+即
+
+\begin{equation}
+	\max (f(x),g(x)) = O (f(x)+g(x)) \label{eqn:p22o}
+\end{equation}
+
+由\eqref{p22theta}和\eqref{eqn:p22o}可得
+
+
+$$
+\max (f(x),g(x)) = \Theta (f(x)+g(x)) \label{eqn:p22o}
+$$
+
+\section{题2.9}
+
+\textbf{必要性：} 
+由$f(n)=\Theta(g(n))$得
+$$
+\lim_{n \to \infty}\frac{f(n)}{g(n)}=k, 0<k<\infty
+$$
+
+则由
+
+$$
+\lim_{n \to \infty}\frac{f(n)}{g(n)} \ne 0
+$$
+
+得$f(n)=\Omega(g(n))$，由
+
+$$
+\lim_{n \to \infty}\frac{f(n)}{g(n)} \ne \infty
+$$
+
+得$f(n)=O(g(n))$
+
+\textbf{充分性：}
+由$f(n)=O(g(n))$且$f(n)=\Omega(g(n))$得
+
+$$
+\lim_{n \to \infty}\frac{f(n)}{g(n)} \ne \infty
+$$
+
+且
+
+$$
+\lim_{n \to \infty}\frac{f(n)}{g(n)} \ne 0
+$$
+
+则$\exists k>0$且$k<\infty$使
+
+$$
+\lim_{n \to \infty}\frac{f(n)}{g(n)} = k
+$$
+
+则$f(n)=\Theta(g(n))$
 
 \section{题3.1}
 
@@ -278,7 +367,7 @@ $$
 $$ c_i=\left\{
 \begin{aligned}
 	i & \  \mbox{$i$为$2$的整数幂} \\
-	0 & \  \mbox{其它} \\
+	1 & \  \mbox{其它} \\
 \end{aligned}
 \right.
 $$
@@ -294,14 +383,137 @@ $$
 则平均一次运算的开销为
 
 $$
-\frac{C}{n} = 3+\frac{1}{n}+\frac{\lfloor\ log_2 n \rfloor}{n} 
+\overline{c_i}=\frac{C}{n} = 3+\frac{1}{n}+\frac{\lfloor\ log_2 n \rfloor}{n} 
 $$
 
 当$n$较大时
 
 \begin{align*}
-	\lim_{n \to \infty}\frac{C}{n} &= 3+\lim_{n \to \infty}(\frac{1}{n}+\frac{\lfloor\ log_2 n \rfloor}{n}) \\
+	\overline{c_i}=\lim_{n \to \infty}\frac{C}{n} &= 3+\lim_{n \to \infty}(\frac{1}{n}+\frac{\lfloor\ log_2 n \rfloor}{n}) \\
 	&=3
+\end{align*}
+
+\section{题3.6}
+
+已知实际代价$c_i$为
+
+$$ c_i=\left\{
+\begin{aligned}
+	i & \  \mbox{$i$为$2$的整数幂} \\
+	1 & \  \mbox{其它} \\
+\end{aligned}
+\right.
+$$
+
+对每一个操作收费$\$3$（$\hat{c_i}=3$），并且
+\begin{itemize}
+	\item 当$i$为2的整数幂，使用存款支付$i$
+	\item 当$i$不是2的整数幂，支付费用$\$1$，并且增减存款$\$2$
+\end{itemize}
+
+可以得到表\ref{tbl:p36costs}
+
+\begin{table}[h]
+	\renewcommand{\arraystretch}{1.2}
+	\caption{每次操作的代价与存款}
+	\label{tbl:p36costs}
+	\begin{center}
+		{\footnotesize
+			\begin{tabular}{|c|c|c|}
+				\hline
+				{$i$} & {代价} & {存款} \\
+				\hline
+				$1$ & 1 & 2 \\
+				\hline
+				$2$ & 2 & 3\\
+				\hline
+				$3$ & 1 & 5\\
+				\hline
+				$4$ & 4 & 4\\
+				\hline
+				$5$ & 1 & 6\\
+				\hline
+				$\dots$ & $\dots$ & $\dots$ \\
+				\hline
+		\end{tabular}}
+	\end{center}
+\end{table}
+
+由表\ref{tbl:p36costs}可知$\hat{c_i}=3$满足
+
+$$
+C=3n=\sum_{i=0}^{n}\hat{c_i} \ge \sum_{i=0}^{n}{c_i}
+$$
+
+则平均一次的开销为
+
+$$
+ \overline{c_i}=\frac{C}{n}=3
+$$
+
+\section{题3.8}
+
+已知实际代价$c_i$为
+
+$$ c_i=\left\{
+\begin{aligned}
+	i & \  \mbox{$i$为$2$的整数幂} \\
+	1 & \  \mbox{其它} \\
+\end{aligned}
+\right.
+$$
+
+根据势能法，有
+
+\begin{align*}
+	\hat{c_i}&=c_i+D_i-D_{i-1}\\
+	&=\left\{
+	\begin{aligned}
+		i+D_i-D_{i-1} & \  \mbox{$i$为$2$的整数幂} \\
+		1+D_i-D_{i-1} & \  \mbox{$i$不是$2$的整数幂} \\
+	\end{aligned}
+	\right.
+\end{align*}
+
+
+令$i=2^j+k$，定义势函数$D_i=2k$
+
+$$
+D_i-D_{i-1}=\left\{
+\begin{aligned}
+	0-2(2^j-2^{j-1}-1)&=-i+2 &  \mbox{$i$为$2$的整数幂} \\
+	2k-2(k-1)&=2  &  \mbox{$i$不是$2$的整数幂} \\
+\end{aligned}
+\right.
+$$
+
+则
+
+
+\begin{align*}
+	\hat{c_i}&=c_i+D_i-D_{i-1}\\
+	&=\left\{
+	\begin{aligned}
+		i-i+2 &= 2 & \  \mbox{$i$为$2$的整数幂} \\
+		1+2 &= 3 & \  \mbox{$i$不是$2$的整数幂} \\
+	\end{aligned}
+	\right.
+\end{align*}
+
+求和可得
+
+\begin{align*}
+	C=\sum_{i=0}^{n}{\hat{c_i}}&=\sum_{j=0}^{\lfloor \log_2 n \rfloor}2+3(n-\lfloor \log_2 n \rfloor) \\
+	&= 2{\lfloor \log_2 n \rfloor}+3(n-\lfloor \log_2 n \rfloor)
+\end{align*}
+
+平均一次的代价
+
+
+\begin{align*}
+ \overline{c_i}=\frac{C}{n}&= \frac{2{\lfloor \log_2 n \rfloor}+3(n-\lfloor \log_2 n \rfloor)}{n} \\
+ & \le \lim_{n \to \infty}{3+\frac{2{\lfloor \log_2 n \rfloor}}{n}+\frac{\lfloor \log_2 n \rfloor}{n}} \\
+ &= 3+0+0=3
 \end{align*}
 
 \end{spacing}
