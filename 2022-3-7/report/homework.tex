@@ -1,0 +1,392 @@
+\documentclass[a4paper,twoside]{article}
+\usepackage{blindtext}  
+\usepackage{geometry}
+
+% Chinese support
+\usepackage[UTF8, scheme = plain]{ctex}
+
+% Page margin layout
+\geometry{left=2.3cm,right=2cm,top=2.5cm,bottom=2.0cm}
+
+
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{geometry}
+\usepackage{amsmath}
+\usepackage{float}
+\usepackage{hyperref}
+
+\usepackage{graphics}
+\usepackage{graphicx}
+\usepackage{subfigure}
+\usepackage{epsfig}
+\usepackage{float}
+
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+
+\usepackage{booktabs}
+\usepackage{threeparttable}
+\usepackage{longtable}
+\usepackage{listings}
+\usepackage{tikz}
+
+% cite package, to clean up citations in the main text. Do not remove.
+\usepackage{cite}
+
+\usepackage{color,xcolor}
+
+%% The amssymb package provides various useful mathematical symbols
+\usepackage{amssymb}
+%% The amsthm package provides extended theorem environments
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{enumerate}
+\usepackage{enumitem}
+\usepackage{listings}
+
+\usepackage{indentfirst}
+\setlength{\parindent}{2em} % Make two letter space in the first paragraph
+\usepackage{setspace}
+\linespread{1.5} % Line spacing setting
+\usepackage{siunitx}
+\setlength{\parskip}{0.5em} % Paragraph spacing setting
+
+% \usepackage[contents =22920202204622, scale = 10, color = black, angle = 50, opacity = .10]{background}
+
+\renewcommand{\figurename}{图}
+\renewcommand{\lstlistingname}{代码} 
+\renewcommand{\tablename}{表格}
+\renewcommand{\contentsname}{目录}
+\floatname{algorithm}{算法}
+
+\graphicspath{ {images/} }
+
+%%%%%%%%%%%%%
+\newcommand{\StudentNumber}{22920202204622}  % Fill your student number here
+\newcommand{\StudentName}{熊恪峥}  % Replace your name here
+\newcommand{\PaperTitle}{作业（三）}  % Change your paper title here
+\newcommand{\PaperType}{算法设计与分析} % Replace the type of your report here
+\newcommand{\Date}{2022年3月7日}
+\newcommand{\College}{信息学院}
+\newcommand{\CourseName}{算法设计与分析}
+%%%%%%%%%%%%%
+
+%% Page header and footer setting
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\pagestyle{fancy}
+\fancyhf{}
+% This requires the document to be twoside
+\fancyhead[LO]{\texttt{\StudentName }}
+\fancyhead[LE]{\texttt{\StudentNumber}}
+\fancyhead[C]{\texttt{\PaperTitle }}
+\fancyhead[R]{\texttt{第{\thepage}页，共\pageref*{LastPage}页}}
+
+
+\title{\PaperTitle}
+\author{\StudentName}
+\date{\Date}
+
+\lstset{
+	basicstyle          =   \sffamily,          % 基本代码风格
+	keywordstyle        =   \bfseries,          % 关键字风格
+	commentstyle        =   \rmfamily\itshape,  % 注释的风格，斜体
+	stringstyle         =   \ttfamily,  % 字符串风格
+	flexiblecolumns,                % 别问为什么，加上这个
+	numbers             =   left,   % 行号的位置在左边
+	showspaces          =   false,  % 是否显示空格，显示了有点乱，所以不现实了
+	numberstyle         =   \zihao{-5}\ttfamily,    % 行号的样式，小五号，tt等宽字体
+	showstringspaces    =   false,
+	captionpos          =   t,      % 这段代码的名字所呈现的位置，t指的是top上面
+	frame               =   lrtb,   % 显示边框
+}
+
+\lstdefinestyle{PythonStyle}{
+	language        =   Python, % 语言选Python
+	basicstyle      =   \zihao{-5}\ttfamily,
+	numberstyle     =   \zihao{-5}\ttfamily,
+	keywordstyle    =   \color{blue},
+	keywordstyle    =   [2] \color{teal},
+	stringstyle     =   \color{magenta},
+	commentstyle    =   \color{red}\ttfamily,
+	breaklines      =   true,   % 自动换行，建议不要写太长的行
+	columns         =   fixed,  % 如果不加这一句，字间距就不固定，很丑，必须加
+	basewidth       =   0.5em,
+}
+
+\algnewcommand\algorithmicinput{\textbf{Input:}}
+\algnewcommand\algorithmicoutput{\textbf{Output:}}
+\algnewcommand\Input{\item[\algorithmicinput]}%
+\algnewcommand\Output{\item[\algorithmicoutput]}%
+
+\begin{document}
+	
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\makeatletter % change default title style
+\renewcommand*\maketitle{%
+	\begin{center} 
+		\bfseries  % title 
+		{\LARGE \@title \par}  % LARGE typesetting
+		\vskip 1em  %  margin 1em
+		{\global\let\author\@empty}  % no author information
+		{\global\let\date\@empty}  % no date
+		\thispagestyle{empty}   %  empty page style
+	\end{center}%
+	\setcounter{footnote}{0}%
+}
+\makeatother
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	
+	
+\thispagestyle{empty}
+
+\vspace*{1cm}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=4.0cm]{logo.png}
+\end{figure}
+
+\vspace*{1cm}
+
+\begin{center}
+	\Huge{\textbf{\PaperType}}
+	
+	\Large{\PaperTitle}
+\end{center}
+
+\vspace*{1cm}
+
+\begin{table}[h]
+	\centering	
+	\begin{Large}
+		\renewcommand{\arraystretch}{1.5}
+		\begin{tabular}{p{3cm} p{5cm}<{\centering}}
+			姓\qquad 名 & \StudentName  \\
+			\hline
+			学\qquad号 & \StudentNumber \\
+			\hline
+			日\qquad期 & \Date  \\
+			\hline
+			学\qquad院 & \College  \\
+			\hline
+			课程名称 & \CourseName  \\
+			\hline
+		\end{tabular}
+	\end{Large}
+\end{table}
+
+\newpage
+
+\title{
+	\Large{\textcolor{black}{\PaperTitle}}
+}
+	
+	
+\maketitle
+	
+\tableofcontents
+ 
+\newpage
+\begin{spacing}{1.2}
+
+\section{题4.2}
+算法\ref{algo:bmvoting}使用多数投票算法查找出现次数最多的元素。
+\begin{algorithm}
+	\caption{查找数组中出现次数最多的元素}
+	\label{algo:bmvoting}
+	\begin{algorithmic}[1]
+		\Output{元组$(m,c)$，其中$m$是出现最多的元素，$c$是出现次数}
+		\Procedure{FindMost}{$A$}     
+		\State $c \gets 0$
+		\State $m \gets 0$
+		\For{$j \gets 1$ to $n$}
+		\If{$c==0$}
+		\State $c \gets 1$
+		\State $m \gets A[j]$
+		\EndIf
+		\If{$A[j]==m$}
+		\State $c \gets $c+1
+		\Else
+		\State $c \gets $c-1
+		\EndIf
+		\EndFor
+		
+		\State $c \gets 0$
+		\For{$j \gets 1$ to $n$}
+		\If{$A[j]==m$}
+		\State $c \gets $c+1
+		\EndIf
+		\EndFor
+		\Return (m,c)
+		\EndProcedure
+		
+	\end{algorithmic}
+\end{algorithm}	
+
+该算法前10行使用投票法找到出现次数最多的元素，然后统计出现的次数。时间复杂度是$O(n)$，空间复杂度是$O(1)$。
+
+
+\section{题4.4}
+
+$Perm(m)$的循环不变式是
+
+$$
+L_m=\mbox{每次执行$Perm(m)$前，$P[1\dots m-1]$是$m-1$个元素的一个排列。}
+$$
+
+\textbf{初始：}当$m=1$时，$P[1\dots 0]$中是0个元素的排列，即空集。
+
+\textbf{归纳：}调用$Perm(m)$时，$P[1\dots m-1]$是$m-1$个元素的一个排列，算法$Perm(m)$将$P[j]$中放入第$m+1\dots n$中的一个元素，得到$m$个数字的排列。
+
+\textbf{终止：}当$m=n$时，即$m=n+1$执行前，$P[1\dots n]$是$n$个元素的一个排列。
+
+\section{题4.6}
+
+\textbf{初始：}$GeneratingPerm2$第一次调用$Perm2(n)$时，$P[1\dots n]$有$n$个$0$。
+
+\textbf{归纳：}若调用$Perm2(m)$时有$m$个$0$，$Perm2(m)$先在其中一个$0$的位置以$m$替代$0$，然后调用$Perm2(m-1)$，此时有$m-1$个$0$。
+
+因此在每一次调用$Perm2(m)$时$P$中都有$m$个$0$。
+
+$Perm(2)$中的$for$循环将每一个$0$的位置以$m$替代$0$然后调用$Perm2(m-1)$，因此$Perm2(m-1)$调用了$m$次。
+
+\section{题4.11}
+
+令
+
+$$
+n=2^m
+$$
+
+则
+
+$$
+S(m)=T(2^m)=2T(2^{\frac{m}{2}})+1=2S(\frac{m}{2})+1
+$$
+
+猜测$S(m)=O(m)$，则需要证$S(m)\le cn-b$
+
+\textbf{当$m=1$}，$S(m)=1\le c-b$，当$c \ge 1+b$。
+
+\textbf{若$S(\frac{m}{2})\le c\frac{m}{2}-b$}，则
+
+\begin{align*}
+	S(m)&=2S(\frac{m}{2})+1 \\
+	&=2c \frac{m}{2}+1-2b \\
+	& \le cm-b
+\end{align*}
+
+当
+
+$$
+b \ge 1
+$$
+
+所以
+
+$$
+S(m) \le cm \iff S(m)=O(m)
+$$
+
+则
+
+$$
+T(n)=T(2^m)=S(m)=O(m)=O(\log n)
+$$
+
+\subsection{题4.12}
+
+	\begin{tikzpicture}
+	[thick,scale=1, every node/.style={scale=2}]
+	\node {$cn$}
+	child {node {$c\frac{n}{2}$}
+		child {node {$c\frac{n}{4}$}
+			child {node {$\dots$}}
+		}
+		child {node {$c\frac{n}{4}$}
+			child {node {$\dots$}}
+		}
+		child {node {$c\frac{n}{4}$}
+			child {node {$\dots$}}
+		}
+		child {node {$c\frac{n}{4}$}
+			child {node {$\dots$}}
+		}
+	}	
+	child [missing] {}	
+	child [missing] {}	
+	child { node {$c\frac{n}{2}$}
+		child {node {1}
+			child {node {$\dots$}}
+		}
+		child {node {3}
+			child {node {$\dots$}}
+		}
+	}	
+	child [missing] {}	
+	child { node {$c\frac{n}{2}$}
+	child {node {1}
+			child {node {$\dots$}}
+		}
+		child {node {3}
+			child {node {$\dots$}}
+		}
+	}
+	child [missing] {}	
+	child [missing] {}	
+	child { node {$c\frac{n}{2}$}
+		child {node {$c\frac{n}{4}$}
+			child {node {$\dots$}}
+		}
+		child {node {$c\frac{n}{4}$}
+			child {node {$\dots$}}
+		}
+		child {node {$c\frac{n}{4}$}
+			child {node {$\dots$}}
+		}
+		child {node {$c\frac{n}{4}$}
+			child {node {$\dots$}}
+		}
+	};
+\end{tikzpicture}
+
+
+由树状图可得$k=\log_2 n$
+
+则
+
+\begin{align*}
+	& cn + 4 \cdot \frac{1}{2} n + 16 \cdot \frac{1}{16} n + \dots \\
+	&= n \sum_{i=1}^{\log_2 n} 2^i \\
+	&= \frac{2(1-n)}{1-2} \\
+	&= 2n^2-2n
+\end{align*}
+
+因此
+
+$$
+T(n)=O(n^2)
+$$
+
+\textbf{证明： $T(n) \le kn^2-bn$}
+
+\textbf{当}$n=1$，$T(n)=c \le k-b$，当$k \ge c+b$
+
+\textbf{若}$T(\frac{n}{2})<k{(\frac{n}{2})}^2-b\frac{n}{2}$
+
+\begin{align*}
+T(n) & \le 4 k{(\frac{n}{2})}^2 -b\frac{n}{2} + cn \\
+ &= kn^2 - (\frac{b}{2}-c)n \\
+ & \le kn^2 - bn
+\end{align*}
+
+当
+
+$$
+b \le 2c
+$$
+
+\end{spacing}
+\end{document}
