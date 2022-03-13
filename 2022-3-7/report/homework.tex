@@ -296,10 +296,10 @@ $$
 T(n)=T(2^m)=S(m)=O(m)=O(\log n)
 $$
 
-\subsection{题4.12}
+\section{题4.12}
 
-	\begin{tikzpicture}
-	[thick,scale=1, every node/.style={scale=2}]
+\begin{tikzpicture}
+	[thin,scale=0.8, every node/.style={scale=1.2}]
 	\node {$cn$}
 	child {node {$c\frac{n}{2}$}
 		child {node {$c\frac{n}{4}$}
@@ -360,7 +360,7 @@ $$
 \begin{align*}
 	& cn + 4 \cdot \frac{1}{2} n + 16 \cdot \frac{1}{16} n + \dots \\
 	&= n \sum_{i=1}^{\log_2 n} 2^i \\
-	&= \frac{2(1-n)}{1-2} \\
+	&= n \frac{2(1-n)}{1-2} \\
 	&= 2n^2-2n
 \end{align*}
 
@@ -387,6 +387,171 @@ T(n) & \le 4 k{(\frac{n}{2})}^2 -b\frac{n}{2} + cn \\
 $$
 b \le 2c
 $$
+
+\section{Leetcode 144}
+
+\subsection{思路分析}
+
+求先序遍历，就先输出根节点的值，然后对左右子树分别进行先序遍历。运行结果如图\ref{fig:lc144}。代码如\ref{code:lc144}，递归的终止条件是左右子树都是空。具体实现见\nameref{sec:code}。
+
+\subsection{运行结果}
+
+\begin{figure}[h]
+	\centering
+	\label{fig:lc144}
+	\caption{运行结果}
+	\includegraphics[width=0.8\linewidth]{lc144.png}
+\end{figure}
+
+\section{Leetcode 236}
+
+LCA是一种有各种算法的问题。常见的方法比如使用了并查集的Tarjan算法能较快地给出多组LCA查询的答案。但我写了一个暴力的算法，因为我想体验一下暴力算法的写法。
+
+\subsection{思路分析}
+
+首先假设有如图\ref{fig:btree}(a)所示的二叉树，假设我们对点$h$和$d$求LCA，那么我们先对节点递归地标注高度，并求出节点的父节点，然后得到\ref{fig:btree}(b)，之后按照如下方法进行迭代
+
+\begin{itemize}
+	\item 先让高度较低（高度值较大的节点沿父节点方向向上移动到两个节点处在同一层
+	\item 两节点同时向上移动直到首次达到相等
+\end{itemize}
+
+然后就得到了LCA是$a$的答案。按照这个思路实现代码\ref{code:lc236}，具体见\nameref{sec:code}。
+
+\subsection{运行结果}
+
+运行结果如图\ref{fig:lc236}。可以发现暴力算法确实运行较慢，而且并不比Tarjan算法好写，看来还是写Tarjan算法比较好。
+\begin{figure}
+	\centering
+	\caption{一棵二叉树}
+	\label{fig:btree}
+	\subfigure[原始二叉树]{
+	\begin{minipage}[t]{0.4\linewidth}
+		\centering
+		\begin{tikzpicture}
+			[thick,scale=0.8, every node/.style={scale=1}]
+			\node {a}
+			child {node {b}
+				child {node {c}}
+				child {node {d}}
+			}	
+			child [missing] {}	
+			child {node {e}
+				child {node {f}}
+				child { node {g}
+					child {node {h}}
+					child {node {i}
+						child {node {j}}
+					}
+				}	
+			};
+		\end{tikzpicture}
+	\end{minipage}}
+	\subfigure[预处理后的二叉树]{
+	\begin{minipage}[t]{0.4\linewidth}
+		\centering
+		\begin{tikzpicture}
+			[thick,scale=0.8, every node/.style={scale=1}]
+			\node {a(0,None)}
+			child {node {b(1,a)}
+				child [missing] {}	
+				child {node {c(2,b)}}
+				child [missing] {}	
+				child {node {d(2,b)}}
+				child [missing] {}	
+			}	
+			child [missing] {}	
+			child [missing] {}	
+			child {node {e(1,a)}
+				child [missing] {}	
+				child {node {f(2,e)}}
+				child [missing] {}	
+				child { node {g(2,e)}
+					child {node {h(3,g)}}
+					child [missing] {}	
+					child {node {i(3,g)}
+						child {node {j(4,i)}}
+					}
+				}	
+			};
+		\end{tikzpicture}
+	\end{minipage}}
+	
+\end{figure}
+
+\begin{figure}[htbp]
+	\centering
+	\label{fig:lc236}
+	\caption{运行结果}
+	\includegraphics[width=0.8\linewidth]{lc236.png}
+\end{figure}
+
+
+\newpage
+\clearpage
+
+\appendix
+
+
+\section{附录：编程题代码}
+\label{sec:code}
+
+\begin{lstlisting}[language=Python,numbers=left,style=PythonStyle,caption=求先序遍历,label={code:lc144}]
+class Solution:
+	def __init__(self):
+		self.list = []
+	
+	def traversal(self, root: Optional[TreeNode]):
+		if root is None:
+			return
+		
+		self.list.append(root.val)
+		self.traversal(root.left)
+		self.traversal(root.right)
+	
+	def preorderTraversal(self, root: Optional[TreeNode]) -> List[int]:
+		self.traversal(root)
+		return self.list
+	
+\end{lstlisting}
+
+\begin{lstlisting}[language=Python,numbers=left,style=PythonStyle,caption=求LCA,label={code:lc236}]
+class Solution:
+	def __init__(self):
+		self.heights = dict()
+	
+	def height(self, root: 'TreeNode', anc: Optional[TreeNode], h):
+		root.ancestor = anc
+		self.heights[root] = h
+	
+	if root.left is not None:
+		self.height(root.left, root, h + 1)
+	
+	if root.right is not None:
+		self.height(root.right, root, h + 1)
+
+	def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
+		self.height(root, None, 1)
+		
+		if self.heights[p] == self.heights[q]:
+			while p.val != q.val:
+			p = p.ancestor
+			q = q.ancestor
+		
+		return p
+		
+		(low, high, high_h) = (p, q, self.heights[q]) if self.heights[p] > self.heights[q] else (q, p, self.heights[p])
+		
+		while self.heights[low] > high_h:
+			low = low.ancestor
+		
+		while not (low is None) and not (high is None) and low.val != high.val:
+			low = low.ancestor
+			high = high.ancestor
+		
+		return low
+\end{lstlisting}
+
 
 \end{spacing}
 \end{document}
