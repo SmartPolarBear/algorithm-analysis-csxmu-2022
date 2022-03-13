@@ -403,11 +403,71 @@ $$
 	\includegraphics[width=0.8\linewidth]{lc144.png}
 \end{figure}
 
+\clearpage
+
 \section{Leetcode 236}
 
 LCA是一种有各种算法的问题。常见的方法比如使用了并查集的Tarjan算法能较快地给出多组LCA查询的答案。但我写了一个暴力的算法，因为我想体验一下暴力算法的写法。
 
 \subsection{思路分析}
+
+\begin{figure}
+	\centering
+	\caption{一棵二叉树}
+	\label{fig:btree}
+	\subfigure[原始二叉树]{
+		\begin{minipage}[t]{0.4\linewidth}
+			\centering
+			\begin{tikzpicture}
+				[thick,scale=0.8, every node/.style={scale=1}]
+				\node {a}
+				child {node {b}
+					child {node {c}}
+					child {node {d}}
+				}	
+				child [missing] {}	
+				child {node {e}
+					child {node {f}}
+					child { node {g}
+						child {node {h}}
+						child {node {i}
+							child {node {j}}
+						}
+					}	
+				};
+			\end{tikzpicture}
+	\end{minipage}}
+	\subfigure[预处理后的二叉树]{
+		\begin{minipage}[t]{0.4\linewidth}
+			\centering
+			\begin{tikzpicture}
+				[thick,scale=0.8, every node/.style={scale=1}]
+				\node {a(0,None)}
+				child {node {b(1,a)}
+					child [missing] {}	
+					child {node {c(2,b)}}
+					child [missing] {}	
+					child {node {d(2,b)}}
+					child [missing] {}	
+				}	
+				child [missing] {}	
+				child [missing] {}	
+				child {node {e(1,a)}
+					child [missing] {}	
+					child {node {f(2,e)}}
+					child [missing] {}	
+					child { node {g(2,e)}
+						child {node {h(3,g)}}
+						child [missing] {}	
+						child {node {i(3,g)}
+							child {node {j(4,i)}}
+						}
+					}	
+				};
+			\end{tikzpicture}
+	\end{minipage}}
+	
+\end{figure}
 
 首先假设有如图\ref{fig:btree}(a)所示的二叉树，假设我们对点$h$和$d$求LCA，那么我们先对节点递归地标注高度，并求出节点的父节点，然后得到\ref{fig:btree}(b)，之后按照如下方法进行迭代
 
@@ -421,65 +481,9 @@ LCA是一种有各种算法的问题。常见的方法比如使用了并查集�
 \subsection{运行结果}
 
 运行结果如图\ref{fig:lc236}。可以发现暴力算法确实运行较慢，而且并不比Tarjan算法好写，看来还是写Tarjan算法比较好。
-\begin{figure}
-	\centering
-	\caption{一棵二叉树}
-	\label{fig:btree}
-	\subfigure[原始二叉树]{
-	\begin{minipage}[t]{0.4\linewidth}
-		\centering
-		\begin{tikzpicture}
-			[thick,scale=0.8, every node/.style={scale=1}]
-			\node {a}
-			child {node {b}
-				child {node {c}}
-				child {node {d}}
-			}	
-			child [missing] {}	
-			child {node {e}
-				child {node {f}}
-				child { node {g}
-					child {node {h}}
-					child {node {i}
-						child {node {j}}
-					}
-				}	
-			};
-		\end{tikzpicture}
-	\end{minipage}}
-	\subfigure[预处理后的二叉树]{
-	\begin{minipage}[t]{0.4\linewidth}
-		\centering
-		\begin{tikzpicture}
-			[thick,scale=0.8, every node/.style={scale=1}]
-			\node {a(0,None)}
-			child {node {b(1,a)}
-				child [missing] {}	
-				child {node {c(2,b)}}
-				child [missing] {}	
-				child {node {d(2,b)}}
-				child [missing] {}	
-			}	
-			child [missing] {}	
-			child [missing] {}	
-			child {node {e(1,a)}
-				child [missing] {}	
-				child {node {f(2,e)}}
-				child [missing] {}	
-				child { node {g(2,e)}
-					child {node {h(3,g)}}
-					child [missing] {}	
-					child {node {i(3,g)}
-						child {node {j(4,i)}}
-					}
-				}	
-			};
-		\end{tikzpicture}
-	\end{minipage}}
-	
-\end{figure}
 
-\begin{figure}[htbp]
+
+\begin{figure}[h]
 	\centering
 	\label{fig:lc236}
 	\caption{运行结果}
