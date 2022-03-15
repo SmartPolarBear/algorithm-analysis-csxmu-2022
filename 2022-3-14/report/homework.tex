@@ -214,6 +214,8 @@
 	\end{algorithmic}
 \end{algorithm}	
 
+通过画出区间划分的树状图，可以发现它与递归方法等效，并且有相同的时间复杂度，它的时间复杂度仍是$O(n\log n)$，这是基于比较的排序算法的时间复杂度下界，因此它是最有效的。
+
 \section{题5.3}
 如算法\ref{algo:recurbsearch}，通过二分搜索的方法寻找$x$，在找到时返回下标，否则返回$-1$。
 
@@ -382,6 +384,19 @@ $$
 \end{align*}
 
 当$n\ge 2$时成立
+
+\section{题5.18}
+
+
+如图\ref{fig:chese}所示，在左上角放下一个三连格之后，可以将完整的棋盘分为两个完整的子棋盘，然后可以递归地继续解决这两个完整的子棋盘的铺设问题。
+
+\begin{figure}[h]
+	\centering
+	\label{fig:chese}
+	\caption{放下一个三连格之后}
+	\includegraphics[width=0.8\linewidth]{cheseboard.png}
+\end{figure}
+
 
 \end{spacing}
 \end{document}
