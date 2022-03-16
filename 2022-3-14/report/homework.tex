@@ -397,6 +397,61 @@ $$
 	\includegraphics[width=0.8\linewidth]{cheseboard.png}
 \end{figure}
 
+\clearpage
+
+\section{XOJ 1004}
+
+本题要求最大公约数和最小公倍数，由公式
+
+$$
+gcd(x,y)=gcd(b,a\mod b) \ \ \ \ a>b\mbox{且}a\mod b \ne 0
+$$
+
+和$gcd$与$lcm$的关系
+
+$$
+lcm(x,y)=x \cdot y \cdot gcd(x,y)
+$$
+
+可以简单地给出递归实现代码\ref{code:gcd}，运行结果如图\ref{fig:xoj1004}
+
+\begin{lstlisting}[language=Python,numbers=left,style=PythonStyle,caption=XOJ1004,label={code:gcd}]
+def gcd(a, b):
+	return b if a % b == 0 else gcd(b, a % b)
+
+
+a, b = map(int, input().split())
+g = gcd(a, b)
+
+print(g, a * b // g, sep='\n')
+\end{lstlisting}
+
+\begin{figure}[htbp]
+	\centering
+	\begin{minipage}[t]{0.48\textwidth}
+		\centering
+		\includegraphics[width=6cm]{t1.png}
+		\caption{XOJ1004}
+		\label{fig:xoj1004}
+	\end{minipage}
+	\begin{minipage}[t]{0.48\textwidth}
+		\centering
+		\includegraphics[width=6cm]{t2.png}
+		\caption{XOJ1057}
+		\label{fig:xoj1057}
+	\end{minipage}
+\end{figure}
+
+
+\section{XOJ1057}
+
+按题意在区间$[1,n]$内计算有几个数字被$n$整除即可，运行结果如图\ref{fig:xoj1057}
+
+\begin{lstlisting}[language=Python,numbers=left,style=PythonStyle,caption=XOJ1057,label={code:multipier}]
+n = int(input())
+
+print(sum(1 for i in filter(lambda x: n % x == 0, range(1, n + 1))))
+\end{lstlisting}
 
 \end{spacing}
 \end{document}
