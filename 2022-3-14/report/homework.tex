@@ -393,9 +393,69 @@ $$
 \begin{figure}[h]
 	\centering
 	\label{fig:chese}
+	\includegraphics[width=0.5\linewidth]{cheseboard.png}
 	\caption{放下一个三连格之后}
-	\includegraphics[width=0.8\linewidth]{cheseboard.png}
 \end{figure}
+
+
+这种方法是可行的，因为三连格的特点是
+
+\begin{itemize}
+	\item 短边一侧的长度是1
+	\item 长边一侧的长度是3
+\end{itemize}
+
+对于一个$2i \times 3j$的平板而言，短边的长度可以密铺\textit{任意}一端($1$可以整除任何数)，但是长边的长度\textit{需要对应$3j$的边长}，这样才能不重叠地覆盖该棋盘。那么这个问题实际上相当于解决以下问题：
+
+\begin{equation}
+	\label{eqn:derived_problem}
+	\mbox{\centerline{\textit{\textbf{使用三连格平铺一边长度是$3$的倍数的平板}}}}
+\end{equation}
+
+如图\ref{fig:chese}，将一个三连格的长边对应平板长度是$3$的倍数的边，放置在左上角，这样一来由三连格的右侧切分平板，将平板(设为$3j \times h$)分为两部分：
+
+\begin{itemize}
+	\item $3 \times h$的子平板
+	\item $3(j-1) \times h$的子平板
+\end{itemize}
+
+显然，用三连格平铺这两个部分都属于问题\eqref{eqn:derived_problem}的子问题，因为它们有一边长度是$3$的倍数。并且这两个子问题规模较原问题有所减少，因此可以用分治的方法解决，如算法\ref{algo:cover}。
+
+\begin{algorithm}
+	\caption{使用三连格平铺}
+	\label{algo:cover}
+	\begin{algorithmic}[1]
+		\Input{$B$: 初始化为0的二维数组，表示平板, $w$: 宽度，为$3$的倍数, $h$: 高度}
+		\Procedure{Cover}{$B[w][h]$,$w$,$h$,$x=0$,$y=0$,$r=0$}     
+		
+		\State $(B[x],B[x+1],B[x+2]) \gets (r,r,r)$
+		
+		\If{$w==3$ $\mathbf{and}$ $h==1$}
+		\Return
+		\EndIf
+		
+		\State $w1 \gets 3$
+		\State $h1 \gets h-1$
+		\State $x1 \gets x$
+		\State $y1 \gets y+1$
+		\If{$h1 > 0 \ \mathbf{and} \ y1<h$}
+			\State \Call{Cover}{$B$,$w1$,$h1$,$x1$,$y1$,$r+1$}
+		\EndIf
+		
+		\State $w2 \gets w-3$
+		\State $h2 \gets h$
+		\State $x2 \gets x+3$
+		\State $y1 \gets y$
+		
+		\If{$w2 > 0 \ \mathbf{and} \ x2<w$}
+		\State \Call{Cover}{$B$,$w2$,$h2$,$x2$,$y2$,$r+1$}
+		\EndIf
+		
+		\EndProcedure
+	\end{algorithmic}
+\end{algorithm}
+
+该算法的结果应当是$B$被填满，填上相同数字$i$的三连部分表示在递归树的第$i$层，这些位置被铺上了三连格。更新参数$r$的部分可以修改，使得填入代表不同含义的数字。
 
 \clearpage
 
