@@ -1,0 +1,428 @@
+\documentclass[a4paper,twoside]{article}
+\usepackage{blindtext}  
+\usepackage{geometry}
+
+% Chinese support
+\usepackage[UTF8, scheme = plain]{ctex}
+
+% Page margin layout
+\geometry{left=2.3cm,right=2cm,top=2.5cm,bottom=2.0cm}
+
+
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{geometry}
+\usepackage{amsmath}
+\usepackage{float}
+\usepackage{hyperref}
+
+\usepackage{graphics}
+\usepackage{graphicx}
+\usepackage{subfigure}
+\usepackage{epsfig}
+\usepackage{float}
+
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+
+\usepackage{booktabs}
+\usepackage{threeparttable}
+\usepackage{longtable}
+\usepackage{listings}
+\usepackage{tikz}
+
+% cite package, to clean up citations in the main text. Do not remove.
+\usepackage{cite}
+
+\usepackage{color,xcolor}
+
+%% The amssymb package provides various useful mathematical symbols
+\usepackage{amssymb}
+%% The amsthm package provides extended theorem environments
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{enumerate}
+\usepackage{enumitem}
+\usepackage{listings}
+
+\usepackage{indentfirst}
+\setlength{\parindent}{2em} % Make two letter space in the first paragraph
+\usepackage{setspace}
+\linespread{1.5} % Line spacing setting
+\usepackage{siunitx}
+\setlength{\parskip}{0.5em} % Paragraph spacing setting
+
+% \usepackage[contents =22920202204622, scale = 10, color = black, angle = 50, opacity = .10]{background}
+
+\renewcommand{\figurename}{图}
+\renewcommand{\lstlistingname}{代码} 
+\renewcommand{\tablename}{表格}
+\renewcommand{\contentsname}{目录}
+\floatname{algorithm}{算法}
+
+\graphicspath{ {images/} }
+
+%%%%%%%%%%%%%
+\newcommand{\StudentNumber}{22920202204622}  % Fill your student number here
+\newcommand{\StudentName}{熊恪峥}  % Replace your name here
+\newcommand{\PaperTitle}{作业（五）}  % Change your paper title here
+\newcommand{\PaperType}{算法设计与分析} % Replace the type of your report here
+\newcommand{\Date}{2022年3月23日}
+\newcommand{\College}{信息学院}
+\newcommand{\CourseName}{算法设计与分析}
+%%%%%%%%%%%%%
+
+%% Page header and footer setting
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\pagestyle{fancy}
+\fancyhf{}
+% This requires the document to be twoside
+\fancyhead[LO]{\texttt{\StudentName }}
+\fancyhead[LE]{\texttt{\StudentNumber}}
+\fancyhead[C]{\texttt{\PaperTitle }}
+\fancyhead[R]{\texttt{第{\thepage}页，共\pageref*{LastPage}页}}
+
+
+\title{\PaperTitle}
+\author{\StudentName}
+\date{\Date}
+
+\lstset{
+	basicstyle          =   \sffamily,          % 基本代码风格
+	keywordstyle        =   \bfseries,          % 关键字风格
+	commentstyle        =   \rmfamily\itshape,  % 注释的风格，斜体
+	stringstyle         =   \ttfamily,  % 字符串风格
+	flexiblecolumns,                % 别问为什么，加上这个
+	numbers             =   left,   % 行号的位置在左边
+	showspaces          =   false,  % 是否显示空格，显示了有点乱，所以不现实了
+	numberstyle         =   \zihao{-5}\ttfamily,    % 行号的样式，小五号，tt等宽字体
+	showstringspaces    =   false,
+	captionpos          =   t,      % 这段代码的名字所呈现的位置，t指的是top上面
+	frame               =   lrtb,   % 显示边框
+}
+
+\lstdefinestyle{PythonStyle}{
+	language        =   Python, % 语言选Python
+	basicstyle      =   \zihao{-5}\ttfamily,
+	numberstyle     =   \zihao{-5}\ttfamily,
+	keywordstyle    =   \color{blue},
+	keywordstyle    =   [2] \color{teal},
+	stringstyle     =   \color{magenta},
+	commentstyle    =   \color{red}\ttfamily,
+	breaklines      =   true,   % 自动换行，建议不要写太长的行
+	columns         =   fixed,  % 如果不加这一句，字间距就不固定，很丑，必须加
+	basewidth       =   0.5em,
+}
+
+\algnewcommand\algorithmicinput{\textbf{Input:}}
+\algnewcommand\algorithmicoutput{\textbf{Output:}}
+\algnewcommand\Input{\item[\algorithmicinput]}%
+\algnewcommand\Output{\item[\algorithmicoutput]}%
+
+\begin{document}
+	
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\makeatletter % change default title style
+\renewcommand*\maketitle{%
+	\begin{center} 
+		\bfseries  % title 
+		{\LARGE \@title \par}  % LARGE typesetting
+		\vskip 1em  %  margin 1em
+		{\global\let\author\@empty}  % no author information
+		{\global\let\date\@empty}  % no date
+		\thispagestyle{empty}   %  empty page style
+	\end{center}%
+	\setcounter{footnote}{0}%
+}
+\makeatother
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	
+	
+\thispagestyle{empty}
+
+\vspace*{1cm}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=4.0cm]{logo.png}
+\end{figure}
+
+\vspace*{1cm}
+
+\begin{center}
+	\Huge{\textbf{\PaperType}}
+	
+	\Large{\PaperTitle}
+\end{center}
+
+\vspace*{1cm}
+
+\begin{table}[h]
+	\centering	
+	\begin{Large}
+		\renewcommand{\arraystretch}{1.5}
+		\begin{tabular}{p{3cm} p{5cm}<{\centering}}
+			姓\qquad 名 & \StudentName  \\
+			\hline
+			学\qquad号 & \StudentNumber \\
+			\hline
+			日\qquad期 & \Date  \\
+			\hline
+			学\qquad院 & \College  \\
+			\hline
+			课程名称 & \CourseName  \\
+			\hline
+		\end{tabular}
+	\end{Large}
+\end{table}
+
+\newpage
+
+\title{
+	\Large{\textcolor{black}{\PaperTitle}}
+}
+	
+	
+\maketitle
+	
+\tableofcontents
+ 
+\newpage
+\setcounter{page}{1}
+
+\begin{spacing}{1.2}
+
+\section{题6.4}
+
+对于维度序列为$\{5,10,3,12,5,50,6\}$的矩阵链，可以按递推方程\eqref{eqn:mat}填表~\ref{tbl:matm}和表~\ref{tbl:mats}
+
+\begin{equation}
+\label{eqn:mat}
+\begin{aligned}
+m_{i,j}=
+\begin{cases}
+	0 \ \ &i=j \\
+	\mathop{\min}_{i\le k<j}\{m_{i,k}+m_{k,j}+p_{i-1}p_jp_k\} \ \ &i\ne j
+\end{cases}
+\end{aligned}
+\end{equation}
+
+\begin{table}[htbp]
+	\label{tbl:matm}
+	\centering
+	\caption{$m_{i,j}$内容}
+	\begin{tabular}{|c|c|c|c|c|c|}
+		\hline
+		0&150&330&405&1655&2010\\ \hline
+		inf&0&360&330&2430&1950\\ \hline
+		inf&inf&0&180&930&1770\\ \hline
+		inf&inf&inf&0&3000&1860\\ \hline
+		inf&inf&inf&inf&0&1500\\ \hline
+		inf&inf&inf&inf&inf&0\\ \hline
+	\end{tabular}
+\end{table}
+
+\begin{table}[htbp]
+	\label{tbl:mats}
+	\centering
+	\caption{$s_{i,j}$内容}
+	\begin{tabular}{|c|c|c|c|c|c|}
+		\hline
+		N&1&2&2&4&2\\\hline
+		N&N&2&2&2&2\\\hline
+		N&N&N&3&4&4\\\hline
+		N&N&N&N&4&4\\\hline
+		N&N&N&N&N&5\\\hline
+		N&N&N&N&N&N\\\hline
+	\end{tabular}
+\end{table}
+
+并且根据$s_{i,j}$中的内容可以得到括号加法为
+
+$$
+( ( A_{1} A_{2} ) ( ( A_{3} A_{4} ) ( A_{5} A_{6} ) ) ) 
+$$
+
+代码实现见\nameref{sec:app_impl}中的代码\ref{code:implmat}
+
+\section{题6.6}
+
+\begin{equation}
+	\begin{aligned}
+		P(n)=
+		\begin{cases}
+		\Theta(1) \ \ \ &n=1\\
+		\mathop{\sum}_{k=1}^{n-1}P(k)P(n-k) \ \ \ &n\ge 2
+		\end{cases}
+	\end{aligned}
+\end{equation}
+
+要证$P(n)=\Omega (2^n)$只需证$P(n)\ge c\cdot 2^n$
+
+\textbf{证：} $P(n)\ge c\cdot 2^n$
+
+\textbf{当} $n=1$， $P(1)=1>c\cdot 2$，当$c\le 1$
+
+\textbf{若} $\forall k<n, P(k) \ge c\cdot 2^k$成立，则
+
+\begin{align*}
+	P(n)&=\mathop{\sum}_{k=1}^{n-1}P(k)P(n-k)\\
+	&\ge c\cdot 2^1 \times c\cdot 2^{n-1} + c\cdot 2^2 \times c\cdot 2^{n-2}+\cdots+  c\cdot 2^{n-1} \times  c\cdot2^1  \\
+	&= c^2 \cdot (n-1) \cdot (2^n) \\
+	&\ge c\cdot 2^n
+\end{align*}
+
+当
+
+$$
+c \ge \frac{1}{n-1}
+$$
+
+\section{题6.8}
+
+由状态转移方程\eqref{eqn:assm}
+
+\begin{equation}
+\label{eqn:assm}
+\begin{aligned}
+f&=\min\{f_1[n]+x_1,f_2[n]+x_2\} \\
+f_1[n]&=
+\begin{cases}
+	e_1+a_{1,1} \ \ \ &j=1 \\
+	\min\{f_1[j-1],f_2[j-1]+t_{2,j-1}\}+a_{1,j} \ \ \ &j\ge2 
+\end{cases} \\
+f_2[n]&=
+\begin{cases}
+	e_2+a_{2,1} \ \ \ &j=1 \\
+	\min\{f_2[j-1],f_1[j-1]+t_{1,j-1}\}+a_{2,j} \ \ \ &j\ge2 
+\end{cases}
+\end{aligned}
+\end{equation}
+
+可知$f_1[n]$的计算引用了$f_1[n-1]$和$f_2[n-1]$，$f_1[n-1]$的计算引用了$f_1[n-2]$和$f_2[n-2]$，\ldots
+以此类推，设$f_1,f_2$中元素引用次数$r_1[n]=1, r_2[n]=1$，有
+
+$$
+r_1[n-1]=r_1[n]+r_2[n], r_2[n-1]=r_1[n]+r_2[n]
+$$
+
+易知
+
+\begin{align*}
+	r_1[n] &= O(2^n) \\
+	r_2[n] &= O(2^n)
+\end{align*}
+
+则子问题都被多次计算，因此有重叠子问题的性质。
+
+\section{题6.10}
+
+根据状态转移方程可以实现算法~\ref{algo:lcsrecursive}
+
+\begin{algorithm}
+	\caption{LCS问题}
+	\label{algo:lcsrecursive}
+	\begin{algorithmic}[1]
+		\Input{两个字符及其长度，以及备忘录的缓冲区}
+		
+		\Procedure{LCS}{$X$,$Y$,$m$,$n$,$memo$}     
+		
+		\If{$m==0 \mathop{or} n==0$}
+		\State \Return $memo[i][j]=0$
+		\EndIf
+		
+		\If{$memo[i][j]\ne -1$}
+		\State \Return $memo[i][j]$
+		\EndIf
+		
+		\If{$X[m]==Y[n]$}
+		\State \Return $memo[i][j]=$ \Call{LCS}{$X$,$Y$,$m-1$,$n-1$,$memo$}$+1$
+		\Else
+		\State \Return  $memo[i][j]=\max \{$ \Call{LCS}{$X$,$Y$,$m-1$,$n$,$memo$}$,$\Call{LCS}{$X$,$Y$,$m$,$n-1$,$memo$}$\}$
+		\EndIf
+		
+		\EndProcedure
+	\end{algorithmic}
+\end{algorithm}	
+
+\section{题6.11}
+
+$X_m$和$Y_n$是$A$开始的字符串，不妨设存在长度$\ge 2$的最长公共子序列，则
+
+\begin{align*}
+	X_m &= A\ldots s\ldots \\
+	Y_n &= A\ldots s\ldots
+\end{align*}
+
+其中$s$可以是任意字符，表示起始的$A$之后任何一个重合的字符。
+
+\textbf{若}存在一个最长公共子序列${lcs}_k$，${lcs}_k$不以$A$开头，则不妨设${lcs}_k$以$s$开头。
+
+\textbf{则}可以构造${lcs}_k'$，令
+
+$$
+{lcs}_k'=A+{lcs}_k=As\ldots
+$$
+
+由于$X_m$和$Y_n$是$A$开始的字符串，按照定义显然${lcs}_k'$是$X_m$和$Y_n$的一个最长公共子序列。但
+
+$$
+\mathop{len}({lcs}_k')=\mathop{len}({lcs}_k)+1 > \mathop{len}({lcs}_k)
+$$
+
+与最长公共子序列的最优性矛盾，因此假设不成立，一切最长公共子序列都以$A$开头
+
+\clearpage
+\appendix
+
+\section{附录： 代码实现}
+\label{sec:app_impl}
+
+
+\begin{lstlisting}[language=Python,numbers=left,style=PythonStyle,caption=矩阵连乘,label={code:implmat}]
+p = list([5, 10, 3, 12, 5, 50, 6])
+N = 6
+
+m = list([list([0x7fffffff for i in range(0, N + 1)]) for j in range(0, N + 1)])
+s = list([list([0x7fffffff for i in range(0, N + 1)]) for j in range(0, N + 1)])
+
+
+def pretty_print(i, j):
+    if i == j:
+        print('A{}'.format(i), end=' ')
+    else:
+        print("(", end=' ')
+        pretty_print(i, s[i][j])
+        pretty_print(s[i][j] + 1, j)
+        print(")", end=' ')
+
+
+for i in range(1, N + 1):
+    m[i][i] = 0
+
+for i in range(N, 0, -1):
+    for j in range(i, N + 1):
+        if i == j:
+            m[i][j] = 0
+        else:
+            for k in range(i, j):
+                val = m[i][k] + m[k + 1][j] + p[i - 1] * p[j] * p[k]
+                if m[i][j] > val:
+                    m[i][j] = val
+                    s[i][j] = k
+
+for i in range(1, N + 1):
+    for j in range(1, N + 1):
+        print("inf" if m[i][j] == 0x7fffffff else m[i][j], end=' ' if j != N else '\n')
+
+for i in range(1, N + 1):
+    for j in range(1, N + 1):
+        print("None" if s[i][j] == 0x7fffffff else s[i][j], end=' ' if j != N else '\n')
+
+pretty_print(1, N)
+
+\end{lstlisting}
+
+\end{spacing}
+\end{document}
