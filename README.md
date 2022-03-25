@@ -21,4 +21,4 @@ Codes for programing problems are implemented in mainly Python 3 or C++.
 
 ### Experiments
 
- [experiment1](https://github.com/SmartPolarBear/algorithm-analysis-csxmu-2022/tree/main/experiment1): Experiment 1.   
+- [experiment1](https://github.com/SmartPolarBear/algorithm-analysis-csxmu-2022/tree/main/experiment1): Experiment 1.   
