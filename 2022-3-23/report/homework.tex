@@ -120,6 +120,8 @@
 \algnewcommand\Input{\item[\algorithmicinput]}%
 \algnewcommand\Output{\item[\algorithmicoutput]}%
 
+\usetikzlibrary{positioning, shapes.geometric}
+
 \begin{document}
 	
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -464,7 +466,46 @@ f_{i,j}=\begin{cases}
 
 \section{实验一}
 
-要求给定两个程序，判断它们的相似性。显然，\emph{程序的相似性和代码字符串的相似性无关，而与实际执行逻辑的相似性有关}。那么最准确的方式是进行DFA(Data Flow Analysis)和CFA(Control Flow Analysis)，对于相似的程序它们应当能相当准确地反映出相似度。这正是现代IDE对重复代码给出修改建议的方式。但这种方式实现相当复杂，本程序通过对问题进行简化有效地实现了\emph{\textbf{基于语义的}}代码相似性判断。
+要求给定两个程序，判断它们的相似性。显然，\emph{程序的相似性和代码字符串的相似性无关，而与实际执行逻辑的相似性有关}，例如\ref{fig:dupcode}中有两段代码本身不尽相同的代码，但是执行逻辑完全一致。那么最准确的方式是进行DFA(Data Flow Analysis)和CFA(Control Flow Analysis)，对于相似的程序它们应当能相当准确地反映出相似度。这正是现代IDE对重复代码给出修改建议的方式。但这种方式实现相当复杂，本程序通过对问题进行简化有效地实现了\emph{\textbf{基于语义的}}代码相似性判断。
+
+\begin{figure}[htbp]
+\caption{逻辑相同但代码本身差异较大的代码}
+\label{fig:dupcode}
+\begin{minipage}{0.48\textwidth}
+\begin{lstlisting}[language=Python,numbers=left,style=PythonStyle,label={code:dupexample1}]
+int main()
+{
+	bool a = true;
+	if (a)
+	{
+		printf("helloworld");
+	}
+	else
+	{
+		printf("worldhello");
+	}
+	return 0;
+}
+\end{lstlisting}
+\end{minipage}
+\begin{minipage}{0.48\textwidth}
+\begin{lstlisting}[language=Python,numbers=left,style=PythonStyle,label={code:dupexample2}]
+int main()
+{
+	int the_flag = 1;
+	if (the_flag)
+	{
+		puts("helloworld");
+	}
+	else
+	{
+		puts("worldhello");
+	}
+	return 0;
+}
+\end{lstlisting}
+\end{minipage}
+\end{figure}
 
 \subsection{两点假设}
 为了简化问题，首先进行以下两个假设
@@ -480,13 +521,91 @@ $$
 s=\frac{|LCS_{AST_1,AST_2}|}{\mathop{\max}\{|AST_1|,|AST_2|\}}
 $$
 
+\subsection{算法}
+
+根据以上分析，首先需要获得AST中Statement和Expression组成的序列。这里借助Clang编译器。通过观察可以发现输出结果中Statement和Expression都符合正则表达式\eqref{eqn:stmtexprreg}。
+
+\begin{equation}
+\label{eqn:stmtexprreg}
+([a-zA-Z\backslash\_][0-9a-zA-Z\backslash\_]*Expr)|([a-zA-Z\backslash\_][0-9a-zA-Z\backslash\_]*Stmt)
+\end{equation}
+
+因此可以用正则表达式匹配输出来获得上述序列。
+
+\begin{figure}[htbp]
+	\centering
+	\caption{查重流程图设计}
+	
+	\vspace{0.5cm}
+	\begin{tikzpicture}[node distance=10pt]
+		\node[draw, rounded corners]                        (start)   {开始};
+		\node[draw, below=of start]                         (step 1)  {输入两个代码文件名};
+		\node[draw, below=of step 1]                        (step 2)  {从Clang编译器获取AST信息};
+		\node[draw,  below=of step 2]  (step 3) {用正则表达式匹配出Statement和Expression序列};
+		\node[draw,below=of step 3]  (step 4) {对序列求LCS长度};
+		\node[draw, below=of step 4] (step 5) {计算重复率 $s$};
+		\node[draw, rounded corners, below=of step 5]  (end)     {结束};
+		\draw[->] (start)  -- (step 1);
+		\draw[->] (step 1) -- (step 2);
+		\draw[->] (step 2) -- (step 3);
+		\draw[->] (step 3) -- (step 4);
+		\draw[->] (step 4) -- (step 5);
+		\draw[->] (step 5) -- (end);
+	\end{tikzpicture}
+	\label{fig:dupcheckflow}
+\end{figure}
+
+\newpage
+
+根据以上分析可以得到算法流程图~\ref{fig:dupcheckflow}，然后可以实现核心部分如代码~\ref{code:dupcheck}，完整代码见\nameref{sec:app_impl}节中的代码~\ref{code:dupcheckfull}。该实现依赖Clang编译器。
+
+\begin{lstlisting}[language=Python,numbers=left,style=PythonStyle,caption=核心部分代码,label={code:dupcheck}]
+def lcs(s1, s2):
+    f = [[0] * len(s1) * 2] * len(s2) * 2
+
+    for i in range(1, len(s1) + 1):
+        for j in range(1, len(s2) + 1):
+            if s1[i - 1] == s2[j - 1]:
+                f[i][j] = 1 + f[i - 1][j - 1]
+            else:
+                f[i][j] = max(f[i - 1][j], f[i][j - 1])
+
+    return f[len(s1)][len(s2)]
+
+
+def duplication_check(file1: str, file2: str):
+    ast1 = str(shell(['clang -cc1 -ast-dump {}'.format(file1)]))
+    ast2 = str(shell(['clang -cc1 -ast-dump {}'.format(file2)]))
+
+    elems1 = list([i[0] if i[0] != '' else i[1] for i in
+                   re.findall(r'([a-zA-Z\_][0-9a-zA-Z\_]*Expr)|([a-zA-Z\_][0-9a-zA-Z\_]*Stmt)', ast1)])
+    elems2 = list([i[0] if i[0] != '' else i[1] for i in
+                   re.findall(r'([a-zA-Z\_][0-9a-zA-Z\_]*Expr)|([a-zA-Z\_][0-9a-zA-Z\_]*Stmt)', ast2)])
+
+    print("Repeat Rate: {}%".format((lcs(elems1, elems2) / max(len(elems1), len(elems2))) * 100.0))
+\end{lstlisting}
+
+使用以上程序对图~\ref{fig:dupcode}中的代码进行查重，输出的重复率是$81.25\%$，可以看出比起直接比较代码文面，该算法\emph{有效地反映出了底层逻辑的相似性，排除了修改变量名等传统降重方法造成的干扰}。
+
+\subsection{结果分析}
+根据上述测试结果可以得出结论，通过AST得节点序列可以有效地刻画程序的相似度。然而这种方法的思路依然是使用更高层级的“形式相似性”近似“逻辑相似性”，它考虑了一定程度的语义信息。因此，可以使用更为高级的降重技巧规避，例如
+
+\begin{itemize}
+	\item 改变语句顺序
+	\item 将递归结构改为非递归结构
+	\item 将一部分代码移动到一个子过程中
+\end{itemize}
+
+因此这种方式相比于正规的程序静态分析手段而言还是有不足的。然而这种方法实现计算简单，计算量较少，在实际使用中有一定的优势。
+
+
 \clearpage
 \appendix
 
 \section{附录： 代码实现}
 \label{sec:app_impl}
 
-
+\subsection{矩阵连乘}
 \begin{lstlisting}[language=Python,numbers=left,style=PythonStyle,caption=矩阵连乘,label={code:implmat}]
 p = list([5, 10, 3, 12, 5, 50, 6])
 N = 6
@@ -528,6 +647,64 @@ for i in range(1, N + 1):
         print("None" if s[i][j] == 0x7fffffff else s[i][j], end=' ' if j != N else '\n')
 
 pretty_print(1, N)
+
+\end{lstlisting}
+
+\clearpage
+
+\subsection{查重程序}
+
+注意： \emph{\textbf{该实现依赖Clang编译器}}
+
+\begin{lstlisting}[language=Python,numbers=left,style=PythonStyle,caption=查重程序,label={code:dupcheckfull}]
+import subprocess
+from typing import Final
+import re
+import argparse
+
+
+def shell(command):
+    try:
+        return subprocess.check_output(command, shell=True, stderr=subprocess.STDOUT).stdout
+    except subprocess.CalledProcessError as exc:
+        return exc.output
+
+
+def lcs(s1, s2):
+    f = [[0] * len(s1) * 2] * len(s2) * 2
+
+    for i in range(1, len(s1) + 1):
+        for j in range(1, len(s2) + 1):
+            if s1[i - 1] == s2[j - 1]:
+                f[i][j] = 1 + f[i - 1][j - 1]
+            else:
+                f[i][j] = max(f[i - 1][j], f[i][j - 1])
+
+    return f[len(s1)][len(s2)]
+
+
+def duplication_check(file1: str, file2: str):
+    ast1 = str(shell(['clang -cc1 -ast-dump {}'.format(file1)]))
+    ast2 = str(shell(['clang -cc1 -ast-dump {}'.format(file2)]))
+
+    elems1 = list([i[0] if i[0] != '' else i[1] for i in
+                   re.findall(r'([a-zA-Z\_][0-9a-zA-Z\_]*Expr)|([a-zA-Z\_][0-9a-zA-Z\_]*Stmt)', ast1)])
+    elems2 = list([i[0] if i[0] != '' else i[1] for i in
+                   re.findall(r'([a-zA-Z\_][0-9a-zA-Z\_]*Expr)|([a-zA-Z\_][0-9a-zA-Z\_]*Stmt)', ast2)])
+
+    print("Repeat Rate: {}%".format((lcs(elems1, elems2) / max(len(elems1), len(elems2))) * 100.0))
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(prog="dupcheck",
+                                     usage='%(prog)s [options] file1 file2',
+                                     description="Duplication checker")
+    parser.add_argument("file1")
+    parser.add_argument("file2")
+
+    args = parser.parse_args()
+
+    duplication_check(str(args.file1), str(args.file2))
 
 \end{lstlisting}
 

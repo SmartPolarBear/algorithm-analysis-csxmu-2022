@@ -1,6 +1,7 @@
 import subprocess
 from typing import Final
 import re
+import argparse
 
 
 def shell(command):
@@ -23,12 +24,25 @@ def lcs(s1, s2):
     return f[len(s1)][len(s2)]
 
 
-ast1 = str(shell(['clang -cc1 -ast-dump test1.c']))
-ast2 = str(shell(['clang -cc1 -ast-dump test2.c']))
+def duplication_check(file1: str, file2: str):
+    ast1 = str(shell(['clang -cc1 -ast-dump {}'.format(file1)]))
+    ast2 = str(shell(['clang -cc1 -ast-dump {}'.format(file2)]))
 
-elems1 = list([i[0] if i[0] != '' else i[1] for i in
-               re.findall(r'([a-zA-Z\_][0-9a-zA-Z\_]*Expr)|([a-zA-Z\_][0-9a-zA-Z\_]*Stmt)', ast1)])
-elems2 = list([i[0] if i[0] != '' else i[1] for i in
-               re.findall(r'([a-zA-Z\_][0-9a-zA-Z\_]*Expr)|([a-zA-Z\_][0-9a-zA-Z\_]*Stmt)', ast2)])
+    elems1 = list([i[0] if i[0] != '' else i[1] for i in
+                   re.findall(r'([a-zA-Z\_][0-9a-zA-Z\_]*Expr)|([a-zA-Z\_][0-9a-zA-Z\_]*Stmt)', ast1)])
+    elems2 = list([i[0] if i[0] != '' else i[1] for i in
+                   re.findall(r'([a-zA-Z\_][0-9a-zA-Z\_]*Expr)|([a-zA-Z\_][0-9a-zA-Z\_]*Stmt)', ast2)])
 
-print(lcs(elems1, elems2) / max(len(elems1), len(elems2)))
+    print("Repeat Rate: {}%".format((lcs(elems1, elems2) / max(len(elems1), len(elems2))) * 100.0))
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(prog="dupcheck",
+                                     usage='%(prog)s [options] file1 file2',
+                                     description="Duplication checker")
+    parser.add_argument("file1")
+    parser.add_argument("file2")
+
+    args = parser.parse_args()
+
+    duplication_check(str(args.file1), str(args.file2))
