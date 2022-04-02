@@ -242,7 +242,194 @@
 
 \section{题7.6}
 
+设一个编码二叉树不是满二叉树，那么不妨设在满二叉树中的某一子树中，应该出现在$i$层的节点$n$出现在了第$i+1$层，
+如图~\ref{fig:codingtree}。
 
+\begin{figure}[htbp]
+	\centering
+	\caption{前缀编码二叉树的某个子树}
+	\label{fig:codingtree}
+	\subfigure[满编码二叉树的一个子结构]{
+		\begin{minipage}[t]{0.4\linewidth}
+			\centering
+			\begin{tikzpicture}
+				[thick,scale=0.8, every node/.style={scale=1}]
+				\node {a}
+				child {node {b}
+					child {node {c}}
+					child {node {d}}
+				}	
+				child [missing] {}	
+				child {node {e}
+					child {node {f}}
+					child { node {g}}	
+				};
+			\end{tikzpicture}
+			\label{fig:fulltree}
+	\end{minipage}}
+	\subfigure[对应的非满二叉树的一个子结构]{
+		\begin{minipage}[t]{0.4\linewidth}
+			\centering
+			\begin{tikzpicture}
+				[thick,scale=0.8, every node/.style={scale=1}]
+				\node {a}
+				child {node {b}
+					child {node {c}}
+				}	
+				child [missing] {}	
+				child {node {e}
+					child {node {f}}
+					child { node {g}
+						child {node {d}}
+					}	
+				};
+			\end{tikzpicture}
+			\label{fig:notfulltree}
+	\end{minipage}}
+\end{figure}
+
+如果图~\ref{fig:codingtree}\ref{sub@fig:notfulltree}对应了一种最优编码,那么$n$节点的编码长度$l$是最小的。这时，将节点$n$向上移动到第$i$层，
+节点$n$的编码长度将变为$l-1$，这与图~\ref{fig:codingtree}\ref{sub@fig:notfulltree}对应最优编码的假设矛盾。注意到将节点$n$向上移动到第$i$层，
+二叉树会变为满二叉树，如图~\ref{fig:codingtree}\ref{sub@fig:fulltree}，因此没有一棵非满二叉树对应一个最优前缀编码。
+
+\section{题7.9}
+
+硬币的面值是$1,5,10$，满足
+\[2\times 5<1+10
+\]
+
+所以贪心算法可以给出最优解。先对硬币面值进行排序，从最大面值起依次进行兑换，如算法~\ref{algo:coin}。
+
+\begin{algorithm}
+	\caption{硬币兑换}
+	\label{algo:coin}
+	\begin{algorithmic}[1]
+		\Input{面值$X$，硬币$coins$}
+		
+		\Procedure{ChangeCoins}{$X,coins$}     
+		
+		\State \Call{Sort}{$coins$}
+
+		\State $results \gets \varnothing$
+		\For{$coin \in coins$}
+		\While{$X>0$}
+			\State $X \gets X-coin$
+			\State $results \gets results \cup coin$
+		\EndWhile
+		\EndFor
+
+		\State \Return $results$
+		
+		\EndProcedure
+	\end{algorithmic}
+\end{algorithm}	
+
+\section{题7.10}
+
+为了使得等待时间最少，可以使用贪心算法。从需要服务时间最少的客户开始服务，可以使得等待时间最少
+
+\begin{itemize}
+	\item 贪心选择性质
+	\begin{proof}
+		假设有服务序列$S$的一个最优解为$A$，$g_k$是$A$中服务时间最短的客户，$g_m$是$S$中服务客户时间最短的客户。
+		如果\(g_k=g_m\)，则$g_m\in S$，否则，如果\(g_k \neq g_m\)，
+		则构造$A'$，将$a_k$与$A$中满足$a_i=a_m$的元素交换
+		由于$a_m$服务时间最短，所以每一个活动的等待时间不会更长。
+		因此$A'$是一个最优解。
+	\end{proof}
+	\item 最优子结构
+	\begin{proof}
+		如过$A=\{g_1,g_2,\ldots,g_k,g_{k+1},\ldots\}$是一个最优解且有$g_k>g_{k+1}$，那么交换$g_k$与$g_{k+1}$可以使$g_{k+1}$之后的元素等待时间更少
+		这与$A$是最优解矛盾。
+	\end{proof}
+\end{itemize}
+
+因此可以得到算法~\ref{algo:service}
+
+\begin{algorithm}
+	\caption{客户服务}
+	\label{algo:service}
+	\begin{algorithmic}[1]
+		\Input{客户等待时间集合$G$}
+		
+		\Procedure{Serve}{$G$}     
+		
+		\State \Call{Sort}{$G$}
+
+		\State $w \gets G$
+		\For{$i=1 \to |G|$}
+		\State $w[i]=w[i]+w[i-1]$
+		\EndFor
+
+		\State $total\gets 0$
+		\For{$i=1 \to |G|$}
+		\State $total\gets w[i]-w[0]$
+		\EndFor
+		
+
+		\State \Return $total/|Q|$
+		
+		\EndProcedure
+	\end{algorithmic}
+\end{algorithm}	
+
+该算法可以得出最小的平均等待时间。
+
+\section{题7.12}
+
+对于正整数，$y=a^x$和$y=x^a$都有单调不减性。因此将$A,B$倒序排列可以获得最大的回报，如算法~\ref{algo:maxreturn}。
+
+\begin{algorithm}[H]
+	\caption{获取最大回报}
+	\label{algo:maxreturn}
+	\begin{algorithmic}[1]
+		\Input{集合$A,B$}
+		
+		\Procedure{MaxReturn}{$A,B$}     
+		
+		\State \Call{Sort}{$A,B$}
+		
+		\State $ret \gets 0$
+		\For{$i=0 \to |A|$}
+			\State $ret \gets ret + A[i]^{B[i]}$
+		\EndFor
+
+		\State \Return $ret$		
+		\EndProcedure
+	\end{algorithmic}
+\end{algorithm}	
+
+该贪心算法可以得到最大回报。
+
+\begin{proof}
+	如果一个得到最大回报的排序，对于$B$中的元素存在$b_i<b_j$，不妨设$A$中的元素单调不增，那么在
+	\[
+		\prod\{a_1^{b_1},a_2{b^2},\ldots,a_i^{b^i},a_j^{b_j},\ldots,a_n^{b_n}\}
+	\]
+	中交换$b^i$和$b^j$，那么对其他元素幂的乘积大小无影响，而$a_i>a_j,b_j>b_i$，则$a_i^{b^j}\cdot a_j^{b_i}>a_i^{b^i}\cdot a_j^{b_j}$,
+	由$y=a^x$的单调不减性，这样整体乘积不会减少，并且将上式改造为了一贪心解，因此贪心算法是正确的。
+\end{proof}
+
+\section{题7.14}
+
+$GreedyCaching$算法具有贪心选择性质。
+\begin{proof}
+	设一个置换出元素在置换出缓存之后再一次访问的时间点的最优序列为
+	\[
+		E_1,E_2,\ldots,E_n
+	\]
+	设贪心解为
+	\[
+		F_1,F_2,\ldots,F_n
+	\]
+	因为贪心策略选择之后尽可能迟访问的页面，那么$F_1\ge E_1$
+
+	如果$F_1=E_1$，那么不需要改造
+
+	如果$F_1>E_1$，那么将满足$E_1<E_k\le E_k$的元素$E_k$与$E_1$交换，那么由于$E_k>E_1$，
+	在整个过程中缓存的置换次数不会增加。进行类似的改造，完全将最优解改造成贪心解，
+	而置换次数不会增加，因此贪心解也是一个最优解。它具有贪心选择性质。
+\end{proof}
 
 \end{spacing}
 
