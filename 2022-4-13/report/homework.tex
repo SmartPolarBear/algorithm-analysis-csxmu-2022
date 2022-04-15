@@ -30,6 +30,7 @@
 \usepackage{longtable}
 \usepackage{listings}
 \usepackage{tikz}
+\usepackage{multicol}
 
 % cite package, to clean up citations in the main text. Do not remove.
 \usepackage{cite}
@@ -306,23 +307,78 @@ Tarjan算法可以在$\mathcal{O}(\|V\|+\|E\|)$的时间里求出强连通分量
 	\caption{Tarjans算法}
 	\label{algo:tarjan}
 	\begin{algorithmic}[1]		
-		\Procedure{Tarjan}{$G$}     
-		\State $GT.Vertices\gets G.Vertices$
+		\Procedure{Tarjan}{$G,r$}     
+		\State $low[r]\gets dfn[r] \gets ++dfn\_cnt$
+		\State $vis[r]\gets true$
+		\State $stack\gets r$
 
+		\For{$each \ (r,v) \in E$}
+			\If{!vis[v]}
+				\Call{Tarjan}{$G,v$}
+				\State $low[r] \gets min(low[r],low[v])$
+			\ElsIf{dfn[v]<dfn[r]}
+				\State $low[r] \gets min(low[r],dfn[v])$
+			\EndIf
+		\EndFor
+
+		\If{low[r]==dfn[r]}
+			\State $scc\gets scc\_cnt++$
+			\While{$stack \ne \emptyset$}
+				\State $v\gets stack.pop()$
+				\State $scc[v]\gets scc\_cnt$
+				\State $vis[r]\gets false$
+			\EndWhile
+		\EndIf
 		\EndProcedure
 	\end{algorithmic}
 \end{algorithm}	
 
 \section{题8.7}
 
-Floyd算法的修改版可以用来计算传递闭包，如算法\ref{algo:floyd_closure}。
+Floyd算法的修改版可以用来计算传递闭包，如算法\ref{algo:floyd_closure}。具体而言，按\eqref{eqn:floyd_closure_init}初始化矩阵
+
+\begin{equation}
+	\label{eqn:floyd_closure_init}
+	G[i,j]=\begin{cases}
+		1 \ \ i=j \\
+		0 \ \ otherwise
+	\end{cases}
+\end{equation}
+
+并\eqref{eqn:floyd_closure}按更新
+
+\begin{equation}
+	\label{eqn:floyd_closure}
+	G[i,j]=\begin{cases}
+		true \ \ \exists k, G[i,k]=true \mathop{and} G[k,j]=true \\
+		false \ \ \mathop{otherwise}
+	\end{cases}
+\end{equation}
+
 
 \begin{algorithm}
 	\caption{Floyd算法求传递闭包}
 	\label{algo:floyd_closure}
 	\begin{algorithmic}[1]		
 		\Procedure{Floyd}{$G$}     
-		\State $GT.Vertices\gets G.Vertices$
+		
+		\For{$i \in V$}
+			\For{$j \in V$}
+				\If{i==j}
+					\State $G[i,j]\gets 1$
+				\Else
+					\State $G[i,j]\gets 0$
+				\EndIf
+			\EndFor
+		\EndFor
+
+		\For {$k \in V$}
+			\For {$i \in V$}
+				\For {$j \in V$}
+					\State $G[i,j]\gets G[i,j] \ \mathop{or} \ G[i,k] \ \mathop{and} \ G[k,j]$
+				\EndFor
+			\EndFor
+		\EndFor
 
 		\EndProcedure
 	\end{algorithmic}
@@ -386,9 +442,10 @@ $d[v]>d[u]+w(u,v)$。如算法\ref{algo:bellmanford}。
 
 \section{题8.14}
 
-为了求出DAG中的路径数量，首先进行拓扑排序然后按由逆拓扑序递推可以求出任意两点$s, t$间的路径数量。
+为了求出DAG中的路径数量，首先进行拓扑排序然后按\eqref{eqn:pathcount}由逆拓扑序递推可以求出任意两点$s, t$间的路径数量。
 
 \begin{equation}
+	\label{eqn:pathcount}
 	f[i]=
 	\begin{cases}
 		1 \ \ i=t \\
@@ -396,14 +453,24 @@ $d[v]>d[u]+w(u,v)$。如算法\ref{algo:bellmanford}。
 	\end{cases}
 \end{equation}
 
-然后对起点$s$和任意点求路径数并求和，就可以得到路径树，如算法~\ref{algo:countofpath}。
+然后对起点$s$和任意点求路径数并求和，就可以得到路径数，如算法~\ref{algo:countofpath}。
 
 \begin{algorithm}
-	\caption{计算路径数}
+	\caption{求路径数}
 	\label{algo:countofpath}
 	\begin{algorithmic}[1]		
-		\Procedure{PathCount}{$G,s$}     
-		\State $GT.Vertices\gets G.Vertices$
+		\Procedure{PathCount}{$G,s,t$}     
+		\State $topo\gets$ \Call{TopoSort}{G}
+
+		\State $f[t]\gets 1$
+
+		\For{$i\gets 1 \to \|V\|-1$}
+			\For{$each \ v\in topo[i]$}
+				\State $f[v]\gets f[v]+f[i]$
+			\EndFor
+		\EndFor
+
+		\State \Return $f[s]$
 
 		\EndProcedure
 	\end{algorithmic}
@@ -418,8 +485,17 @@ $d[v]>d[u]+w(u,v)$。如算法\ref{algo:bellmanford}。
 	\label{algo:maxedgecount}
 	\begin{algorithmic}[1]		
 		\Procedure{Bellmanford}{$G,s$}     
-		\State $GT.Vertices\gets G.Vertices$
-
+		\State \Call{InitializeSingleSource}{$G,s$}
+		\State $updated\gets true$
+		\While{$updated$}
+			\State $updated\gets false$
+			\For{$each \ edge(u,v)\in E$}
+				\If{$d[v]>d[u]+w(u,v)$}
+					\State \Call{Relax}{u,v,w}
+					\State $updated\gets true$
+				\EndIf
+			\EndFor
+		\EndWhile
 		\EndProcedure
 	\end{algorithmic}
 \end{algorithm}
@@ -446,30 +522,152 @@ $d[v]>d[u]+w(u,v)$。如算法\ref{algo:bellmanford}。
 	\caption{计算最小边数最大值}
 	\label{algo:floyd2}
 	\begin{algorithmic}[1]		
-		\Procedure{Floyd}{$G$}     
-		\State $GT.Vertices\gets G.Vertices$
+		\Procedure{Floyd}{$G$}    
+		\For{$i \in V$}
+			\For{$j \in V$}
+				\If{$i==j$}
+					\State $d[i,j]\gets 1$
+				\ElsIf{$G[i,j]$}
+					\State $d[i,j]\gets G[i,j]$
+				\Else
+					\State $d[i,j]\gets \infty$
+				\EndIf
+			\EndFor
+		\EndFor
+		
+		\For{$i\gets 1 \to \|V\|$}
+			\For{$j\gets 1 \to \|V\|$}
+				\For{$k\gets 1 \to \|V\|$}
+					\If{$d[i][j]>d[i][k]+d[k][j]$}
+						\State $d[i][j]\gets d[i][k]+d[k][j]$
+						\State $p[i][j]\gets k$
+					\EndIf
+				\EndFor
+			\EndFor
+		\EndFor
 
+		\State \Return $d,p$
 		\EndProcedure
 	\end{algorithmic}
 \end{algorithm}
 
+然后可以递归地根据$p$输出具体路径。
 
 \section{题8.25}
 每次迭代生成的矩阵如表：
+
+\begin{multicols}{2}
+\begin{table}[H]
+	\centering
+	\caption{$k=1$}
+	\label{tab:floyd1}
+	\begin{tabular}{cccccc}
+		$0$&$\infty$&$-1$&$\infty$&$\infty$&$\infty$\\
+		$-4$&$0$&$3$&$\infty$&$\infty$&$\infty$\\
+		$\infty$&$\infty$&$0$&$7$&$\infty$&$\infty$\\
+		$1$&$2$&$\infty$&$0$&$\infty$&$\infty$\\
+		$\infty$&$\infty$&$\infty$&$2$&$0$&$-8$\\
+		$\infty$&$\infty$&$\infty$&$5$&$10$&$0$
+	\end{tabular}
+\end{table}
+\begin{table}[H]
+	\centering
+	\caption{$k=2$}
+	\label{tab:floyd2}
+	\begin{tabular}{cccccc}
+		$0$&$\infty$&$-1$&$\infty$&$\infty$&$\infty$\\
+		$-4$&$0$&$-5$&$\infty$&$\infty$&$\infty$\\
+		$\infty$&$\infty$&$0$&$7$&$\infty$&$\infty$\\
+		$-2$&$2$&$-3$&$0$&$\infty$&$\infty$\\
+		$\infty$&$\infty$&$\infty$&$2$&$0$&$-8$\\
+		$\infty$&$\infty$&$\infty$&$5$&$10$&$0$
+	\end{tabular}
+\end{table}
+\begin{table}[H]
+	\centering
+	\caption{$k=3$}
+	\label{tab:floyd3}
+	\begin{tabular}{cccccc}
+		$0$&$\infty$&$-1$&$6$&$\infty$&$\infty$\\
+		$-4$&$0$&$-5$&$2$&$\infty$&$\infty$\\
+		$\infty$&$\infty$&$0$&$7$&$\infty$&$\infty$\\
+		$-2$&$2$&$-3$&$0$&$\infty$&$\infty$\\
+		$\infty$&$\infty$&$\infty$&$2$&$0$&$-8$\\
+		$\infty$&$\infty$&$\infty$&$5$&$10$&$0$
+	\end{tabular}
+\end{table}
+\begin{table}[H]
+	\centering
+	\caption{$k=4$}
+	\label{tab:floyd4}
+	\begin{tabular}{cccccc}
+		$0$&$8$&$-1$&$6$&$\infty$&$\infty$\\
+		$-4$&$0$&$-5$&$2$&$\infty$&$\infty$\\
+		$5$&$9$&$0$&$7$&$\infty$&$\infty$\\
+		$-2$&$2$&$-3$&$0$&$\infty$&$\infty$\\
+		$0$&$4$&$-1$&$2$&$0$&$-8$\\
+		$3$&$7$&$2$&$5$&$10$&$0$
+	\end{tabular}
+\end{table}
+\begin{table}[H]
+	\centering
+	\caption{$k=5$}
+	\label{tab:floyd5}
+	\begin{tabular}{cccccc}
+		$0$&$8$&$-1$&$6$&$\infty$&$\infty$\\
+		$-4$&$0$&$-5$&$2$&$\infty$&$\infty$\\
+		$5$&$9$&$0$&$7$&$\infty$&$\infty$\\
+		$-2$&$2$&$-3$&$0$&$\infty$&$\infty$\\
+		$0$&$4$&$-1$&$2$&$0$&$-8$\\
+		$3$&$7$&$2$&$5$&$10$&$0$
+	\end{tabular}
+\end{table}
+\begin{table}[H]
+	\centering
+	\caption{$k=6$}
+	\label{tab:floyd6}
+	\begin{tabular}{cccccc}
+		$0$&$8$&$-1$&$6$&$\infty$&$\infty$\\
+		$-4$&$0$&$-5$&$2$&$\infty$&$\infty$\\
+		$5$&$9$&$0$&$7$&$\infty$&$\infty$\\
+		$-2$&$2$&$-3$&$0$&$\infty$&$\infty$\\
+		$-5$&$-1$&$-6$&$-3$&$0$&$-8$\\
+		$3$&$7$&$2$&$5$&$10$&$0$
+	\end{tabular}
+\end{table}
+\end{multicols}
 
 \section{题8.26}
 
 该算法需要存储$d_{ij}$，由于$i\le\|V\|,j\le\|V\|$，则所需空间为$\mathcal{O}(\|V\|^2)$。
 
-该算法的正确性证明如下
+该算法有循环不变式\eqref{eqn:inv}
+
+\begin{equation}
+	\label{eqn:inv}
+	\text{\textbf{在第$k$次迭代之前，$d[i,j]$包含了$i$到$j$的最短路径$Q$，该路径仅包含顶点$\{1,\ldots,k-1\}$}}
+\end{equation}
 
 \begin{proof}
-	
+	在第$k$次迭代中，$Q$的长度与路径$R=R_1+R_2$进行比较，$R_1$为从$i$到$k$的路径，$R_2$为从$k$到$j$的路径。
+	然后选择较短的路径，这条路径的顶点在$\{1,\ldots,k\}$中。此时有两种情况
+	\begin{enumerate}
+		\item 没有进行松弛，不包含$k$，则$Q$在第$k-1$次迭代中被确定。
+		\item 包含$k$，则$Q$可以分解为$R_1$和$R_2$，它们在$k-1$次迭代中被确定。
+	\end{enumerate}
+	因此在第$k$次迭代结束后，循环不变式依然满足。
 \end{proof}
 
 \section{题8.27}
 
-由松弛方法可知，可以调用两次Floyd算法，如果调用完第二次，有路径长度被再一次更新，则说明存在负环。
+由松弛方法\eqref{eqn:floyd}可知，当有负环存在，该松弛会导致每次调用Floyd算法都会减少某些路径长度。
+所以可以调用两次Floyd算法，如果调用完第二次，有路径长度被再一次更新，则说明存在负环。
+
+\begin{equation}
+	\label{eqn:floyd}
+	d[i,j]=\min_{k\in V}(d[i,k]+d[k,j])
+\end{equation}
+
 
 \end{spacing}
 
