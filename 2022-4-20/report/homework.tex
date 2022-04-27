@@ -196,6 +196,65 @@
 
 \begin{spacing}{1.2}
 
+\section{题9.2}
+
+\textbf{源点：}教授家 
+
+\textbf{汇点：}学校 
+
+\textbf{顶点：}街道拐角
+
+\textbf{边：}若$u$和$v$之间有街道，连一权值为1的边
+
+则若存在一条权值$\ge 2$的流，就可以上同一所学校。
+
+\section{题9.5}
+
+\begin{proof}[证明：$c_f(u,v)+c_f(v,u)=c(u,v)+c(v,u)$]
+
+由对称性$f(u,v)=f(v,u)$
+
+\begin{equation*}
+	\begin{aligned}
+		c_f(u,v)+c_f(v,u)&=c(u,v)-f(u,v)+c(v,u)-f(v,u)\\
+		&=c(u,v)-f(u,v)+c(v,u)-f(u,v)\\
+		&=c(u,v)+c(v,u)
+	\end{aligned}
+\end{equation*}
+
+\end{proof}
+
+\section{题9.7}
+
+\begin{proof}
+	原命题等价于\emph{若一个网络中所有的容量之都不同，则存在一个唯一的最大流}
+
+	则最大流$|f|$有
+	\begin{equation*}
+		\begin{aligned}
+			|f|&=\mathop{\max}\sum_{v\in V}f(s,v)\\
+			&=f(s,v_1)+f(s,v_2)+\cdots+(s,v_k)+\cdots+f(s,v_n)\\
+		\end{aligned}
+	\end{equation*}
+	存在$v_k\in V$使得$f(s,v_k)=c(s,v_k)$
+
+	若有两个最大流，设$f(s,v_k)=c(s,v_k)<f^{'}(s,v_k^{'})=c^{'}(s,v_k^{'})$
+	则在f中用$(s,v_k^{'})$替代$(s,v_k)$可以使得$|f|$更大，且$|f^{'}|=|f|$
+	则存在一个唯一的最大流。由最大流最小割定理得有唯一的最小割。
+\end{proof}
+
+\section{题9.8}
+
+\section{题9.9}
+
+\section{题9.18}
+
+将信$i$与除$j$之外剩余的$n-1$个信封连边构成二分图，求该二分图的最大匹配，
+就能尽可能多地正确装入信封中
+
+\section{实现匈牙利算法}
+
+
 
 \end{spacing}
 
