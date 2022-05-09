@@ -66,9 +66,9 @@
 %%%%%%%%%%%%%
 \newcommand{\StudentNumber}{22920202204622}  % Fill your student number here
 \newcommand{\StudentName}{熊恪峥}  % Replace your name here
-\newcommand{\PaperTitle}{作业（八）}  % Change your paper title here
+\newcommand{\PaperTitle}{作业（九）}  % Change your paper title here
 \newcommand{\PaperType}{算法设计与分析} % Replace the type of your report here
-\newcommand{\Date}{2022年4月20日}
+\newcommand{\Date}{2022年5月8日}
 \newcommand{\College}{信息学院}
 \newcommand{\CourseName}{算法设计与分析}
 %%%%%%%%%%%%%
@@ -209,197 +209,140 @@
 
 \begin{spacing}{1.2}
 
-\section{题9.2}
+\section{题12.2}
+\label{sec:t12.2}
 
-\textbf{源点：}教授家 
+对棋盘建立一个坐标系，则两个皇后在一个对角线上当且仅当$k_{ij}=1$或$k_{ij}=-1$。即
 
-\textbf{汇点：}学校 
+\begin{align*}
+	k_{ij}=\frac{x_i-x_j}{i-j}&=1 \\
+	\Rightarrow x_i-x_j&=i-j \\
+\end{align*}
 
-\textbf{顶点：}街道拐角
+同理可得$x_i-x_j=j-i$
 
-\textbf{边：}若$u$和$v$之间有街道，连一权值为1的边
+\section{题12.3}
 
-则若存在一条权值$\ge 2$的流，就可以上同一所学校。
+递归地对第$1,2,\ldots,8$行枚举放的位置，放棋子时检查
+同一行、同一列、对角线上是否有棋子。对角线按第\ref{sec:t12.2}节的结论进行检查
+得到算法~\ref{algo:8queen}。
 
-\section{题9.5}
 
-\begin{proof}[证明：$c_f(u,v)+c_f(v,u)=c(u,v)+c(v,u)$]
-
-由对称性$f(u,v)=f(v,u)$
-
-\begin{equation*}
-	\begin{aligned}
-		c_f(u,v)+c_f(v,u)&=c(u,v)-f(u,v)+c(v,u)-f(v,u)\\
-		&=c(u,v)-f(u,v)+c(v,u)-f(u,v)\\
-		&=c(u,v)+c(v,u)
-	\end{aligned}
-\end{equation*}
-
-\end{proof}
-
-\section{题9.7}
-
-\begin{proof}
-	原命题等价于\emph{若一个网络中所有的容量之都不同，则存在一个唯一的最大流}
-
-	则最大流$|f|$有
-	\begin{equation*}
-		\begin{aligned}
-			|f|&=\mathop{\max}\sum_{v\in V}f(s,v)\\
-			&=f(s,v_1)+f(s,v_2)+\cdots+(s,v_k)+\cdots+f(s,v_n)\\
-		\end{aligned}
-	\end{equation*}
-	存在$v_k\in V$使得$f(s,v_k)=c(s,v_k)$
-
-	若有两个最大流，设$f(s,v_k)=c(s,v_k)<f^{'}(s,v_k^{'})=c^{'}(s,v_k^{'})$
-	则在f中用$(s,v_k^{'})$替代$(s,v_k)$可以使得$|f|$更大，且$|f^{'}|=|f|$
-	则存在一个唯一的最大流。由最大流最小割定理得有唯一的最小割。
-\end{proof}
-
-\section{题9.8}
-
-在剩余网络中从源点进行广度优先搜索，并记录路径，若到达汇点则找到一条增广路径。
-
-\section{题9.9}
-
-为了找到最大瓶颈容量的增广路，可以从源点到汇点进行深度优先搜索，然后选择瓶颈容量
-最大的一条。如算法~\ref{algo:aug}
-
-\begin{algorithm}
-	\caption{找到最大瓶颈容量的增广路}
-	\label{algo:aug}
+\begin{algorithm}[htbp]
+	\caption{8皇后问题}
+	\label{algo:8queen}
 	\begin{algorithmic}[1]
-		\Input{有向无环图$G$,源点$s$，汇点$t$}
-		\Procedure{Find}{$G,s,t$}
-
-		\State $path=\emptyset$
-		\State $length=0$
-
-		\For{$u \in G.vertics$}
-			\For{$v \in G.vertics$}
-				\State $p,len=$ \Call{DFS}{$G$,$u$,$v$,$u$,$\emptyset$}
-				\If{$len>length$}
-					\State $path=p$
+		\Procedure{PutQuene}{$k$}
+			\If{$k=8$}
+				\State \Call{Print}{$pos$}
+			\EndIf
+			\For{$i=1\to 8$}
+				\If{\Call{Check}{$k,i$}}
+					\State $pos[k]\gets i$
+					\State $t=$ \Call{PutQuene}{$k+1$}
+					\State $pos[k]\gets 0$
 				\EndIf
 			\EndFor
-		\EndFor
-
-		\State \Return $path$
-		
+			\State \Return $t$
 		\EndProcedure
 
-		\Procedure{DFS}{$G,s,t,c,len,p=\emptyset$}
-			\If{$c==t$}
-				\State \Return $p$
-			\EndIf
+		\Procedure{Check}{$row,col$}
+			\State $r=pos[row]==0$	
+			\State $c=True$
+			\For{$i=1\to 8$}
+				\If{$pos[i]==col$}
+					\State $c=False$
+					\State $\mathbf{break}$
+				\EndIf
+			\EndFor	
 
-			\For{$v \in G.vertics$}
-				\If{$G.edge($c,$v) \ and \ not \ v.visited$}
-					\State $v.visited=True$
-					\State \Return \Call{DFS}{$G$,$s$,$t$,$\max(len,G.edge($c,$v).c)$,$v$,$p+v$}
+			\State $d=True$
+			\For{$i=1\to 8$}
+				\For{$j=1\to 8$}
+					\If{$row-i==col-j \ \mathbf{or} \ row-i=j-col $}
+						\If{$pos[i]==j$}
+							\State $d=False$
+							\State $\mathbf{break}$
+						\EndIf
+					\EndIf
+				\EndFor
+			\EndFor
+
+			\State \Return $c \ \mathbf{and} \ r \ \mathbf{and} \ d$
+		\EndProcedure
+	\end{algorithmic}
+\end{algorithm}	
+
+\section{题12.4}
+
+递归地检查所有棋子，然后标记所有能攻击的位置。最后检查是否所有的位置都被标记过了。
+如算法~\ref{algo:attack}
+\begin{algorithm}[htbp]
+	\caption{检查能否攻击}
+	\label{algo:attack}
+	\begin{algorithmic}[1]
+		\Procedure{Check}{$pos,n$}
+			\State $board[][]=\emptyset$
+			\State \Call{Mark}{$board,pos,0,n$}
+			\For{$i=1\to n$}
+				\For{$j=1\to n$}
+					\If{$board[i][j]==0$}
+						\State \Return $False$
+					\EndIf
+				\EndFor
+			\EndFor
+			\State \Return $True$
+		\EndProcedure
+
+		\Procedure{Mark}{$board,pos,k,n$}
+			\State $r=pos[row]==0$	
+			\State $c=True$
+			\For{$i=1\to 8$}
+				\If{$pos[i]==col$}
+					\State $c=False$
+					\State $\mathbf{break}$
+				\EndIf
+			\EndFor	
+
+			\State $d=True$
+			\For{$i=1\to 8$}
+				\For{$j=1\to 8$}
+					\If{$row-i==col-j \ \mathbf{or} \ row-i=j-col $}
+						\If{$pos[i]==j$}
+							\State $d=False$
+							\State $\mathbf{break}$
+						\EndIf
+					\EndIf
+				\EndFor
+			\EndFor
+
+			\State \Return $c \ \mathbf{and} \ r \ \mathbf{and} \ d$
+		\EndProcedure
+	\end{algorithmic}
+\end{algorithm}	
+
+\section{题12.5}
+
+枚举每个位置的放置方法，如算法~\ref{algo:permu}。
+\begin{algorithm}[htbp]
+	\caption{检查能否攻击}
+	\label{algo:attack}
+	\begin{algorithmic}[1]
+		\Procedure{Permu}{$p,k,n$}
+			\If{$k==n$}
+				\State \Call{Print}{$p$}
+			\EndIf
+			\For{$i=1\to n$}
+				\If{$vis[i]!=True$}
+					\State $vis[i]=True$
+					\State $p[k]=i$
+					\State \Call{Permu}{$p,k+1,n$}
+					\State $vis[i]=False$
 				\EndIf
 			\EndFor
 		\EndProcedure
 	\end{algorithmic}
 \end{algorithm}	
-
-\section{题9.18}
-
-将信$i$与除$j$之外剩余的$n-1$个信封连边构成二分图，求该二分图的最大匹配，
-就能尽可能多地正确装入信封中
-
-\section{实现匈牙利算法}
-
-\begin{lstlisting}[language=c++,numbers=left,style=CppStyle,caption={匈牙利算法},label={code:hgr}]
-constexpr int NMAX = 510;
-bool g[NMAX][NMAX]{}, vis[NMAX];
-int p[NMAX]{};
-
-void reset()
-{
-	memset(g, 0, sizeof(g));
-	memset(vis, 0, sizeof(vis));
-	memset(p, 0, sizeof(p));
-}
-
-bool match(int i, const int N)
-{
-	for (int j = 1; j <= N; j++)
-	{
-		if (g[i][j] && !vis[j])
-		{
-			vis[j] = true;
-			if (!p[j] || match(p[j], N))
-			{
-				p[j] = i;
-				return true;
-			}
-		}
-	}
-	return false;
-}
-
-int hungarian(const int M, const int N)
-{
-	int ret = 0;
-	for (int i = 1; i <= M; i++)
-	{
-		memset(vis, 0, sizeof(vis));
-		if (match(i, N))
-		{
-			ret++;
-		}
-	}
-	return ret;
-}
-\end{lstlisting}
-
-\section{实现SPA}
-
-\begin{lstlisting}[language=c++,numbers=left,style=CppStyle,caption={匈牙利算法},label={code:hgr}]
-
-int n, m, s, t, last[MAXN], flow[MAXN];
-int bfs()
-{
-    memset(last, -1, sizeof(last));
-    queue<int> q;
-    q.push(s);
-    flow[s] = INF;
-    while (!q.empty())
-    {
-        int p = q.front();
-        q.pop();
-        if (p == t)
-            break;
-        for (int eg = head[p]; eg; eg = edges[eg].next)
-        {
-            int to = edges[eg].to, vol = edges[eg].w;
-            if (vol > 0 && last[to] == -1) 
-            {
-                last[to] = eg;
-                flow[to] = min(flow[p], vol);
-                q.push(to);
-            }
-        }
-    }
-    return last[t] != -1;
-}
-
-int EK()
-{
-    int maxflow = 0;
-    while (bfs())
-    {
-        maxflow += flow[t];
-        for (int i = t; i != s; i = edges[last[i] ^ 1].to) 
-        {
-            edges[last[i]].w -= flow[t];
-            edges[last[i] ^ 1].w += flow[t];
-        }
-    }
-    return maxflow;
-}
-\end{lstlisting}
 
 \end{spacing}
 
