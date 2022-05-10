@@ -324,9 +324,10 @@
 \section{题12.5}
 
 枚举每个位置的放置方法，如算法~\ref{algo:permu}。
+
 \begin{algorithm}[htbp]
 	\caption{检查能否攻击}
-	\label{algo:attack}
+	\label{algo:permu}
 	\begin{algorithmic}[1]
 		\Procedure{Permu}{$p,k,n$}
 			\If{$k==n$}
@@ -343,6 +344,191 @@
 		\EndProcedure
 	\end{algorithmic}
 \end{algorithm}	
+
+\section{题12.8}
+
+可以在枚举每种顶点序列，并且每一步以$w[x[i-1],x[j]]\ne \infty$为约束
+选择是否下一步走顶点$j$。如算法\ref{algo:hmt}
+
+
+\begin{algorithm}[htbp]
+	\caption{哈密顿回路}
+	\label{algo:hmt}
+	\begin{algorithmic}[1]
+		\Procedure{Hamiton}{$w,x,k$}
+			\If{$k==n$}
+				\If{$w[x[n],x[1]]\ne \infty$ and $w[x[n-1],x[n]]\ne \infty$}
+					\State \Call{Print}{$x$}
+				\EndIf
+			\EndIf
+			\For{$i=k\to n-1$}
+				\If{$w[x[k-1],x[j]]\ne \infty$}
+					\State $x[k]\leftrightarrow x[j]$
+					\State \Call{Hamiton}{$w,x,k+1$}
+					\State $x[k]\leftrightarrow x[j]$
+				\EndIf
+			\EndFor
+		\EndProcedure
+	\end{algorithmic}
+\end{algorithm}	
+
+\section{题13.2}
+
+设计限界函数$B(i)$是当前耗时的值加上之后步骤中空闲工人中耗时最小的耗时的和。
+设
+$v[i]=\begin{cases}
+	\infty \ \ \mbox{工人已被分配} \\
+	1 \ \ \mbox{工人未被分配}
+\end{cases}$
+则$B(i)$如\eqref{eqn:bassign}
+
+
+\begin{equation}
+	\label{eqn:bassign}
+	B(i)=C(i)+\sum_{j=i}^{n}\mathop{min}_k{\{c[k,j]\cdot v[k]\}}
+\end{equation}
+
+可以实现如代码~\ref{code:assign}。
+
+\begin{lstlisting}[language=Python,numbers=left,style=PythonStyle,caption=工人分配问题,label={code:assign}]
+from queue import PriorityQueue
+
+c = [[3, 5, 2, 4], [6, 7, 5, 3], [3, 7, 4, 5], [8, 5, 4, 6]]
+
+
+def get_min():
+    mins = []
+    for i in range(0, 4):
+        minval = 0x7fffffff
+        for j in range(0, 4):
+            minval = min([minval, c[j][i]])
+        mins.append(minval)
+    return mins
+
+
+def assign():
+    mins = get_min()
+
+    def b():
+        ret = cur
+        for i in range(step, 4):
+            if not vis[i]:
+                ret += mins[i]
+        return ret
+
+    ans = 0x7fffffff
+    cur, step, vis = 0, 0, [False for _ in range(0, 4)]
+    q = PriorityQueue()
+    while step < 4:
+        for i in range(0, 4):
+            new_cost = cur + c[i][step]
+
+            if vis[i] or new_cost > ans:
+                continue
+
+            if step >= 3:
+                ans = min([ans, new_cost])
+
+            vis[i] = True
+            q.put([b(), (new_cost, step + 1, vis)])
+            vis[i] = False
+
+        _, (cur, step, vis) = q.get()
+    return ans
+\end{lstlisting}
+
+运行结果是13。
+
+\section{题13.4}
+
+N皇后问题的限制函数与回溯法相同，实现如代码~\ref{code:nqueen}。
+
+\begin{lstlisting}[language=Python,numbers=left,style=PythonStyle,caption=N皇后问题,label={code:nqueen}]
+from queue import Queue
+
+
+def check(pos, k, i):
+    if pos[k] >= 0:
+        return False
+
+    for j in range(0, k):
+        if pos[j] == i:
+            return False
+
+        if i - pos[j] == j - k:
+            return False
+
+        if i - pos[j] == k - j:
+            return False
+
+    return True
+
+
+def n_queen(n):
+    k, pos = 0, [-1 for i in range(0, n)]
+    ans = 0
+    q = Queue()
+    q.put((k, pos))
+    while not q.empty():
+        k, pos = q.get()
+        if k == n:
+            print(pos)
+            ans += 1
+            continue
+
+        for i in range(0, n):
+            if check(pos, k, i):
+                q.put((k + 1, [i if r == k else pos[r] for r in range(0, n)]))
+    return ans
+\end{lstlisting}
+
+对于$N=8$的情形，该算法输出92。
+
+\section{题13.10}
+
+约束函数是马只能走到8个位置之一，并且该位置不越界。实现如代码~\ref{code:horse}。
+
+\begin{lstlisting}[language=Python,numbers=left,style=PythonStyle,caption=跳马问题,label={code:horse}]
+
+from queue import Queue
+
+dx = [-1, -1, -2, -2, 1, 1, 2, 2]
+dy = [2, -2, 1, -1, 2, -2, 1, -1]
+
+
+def horse(n, sx, sy, ex, ey):
+    vis = [[False for i in range(0, n)] for j in range(0, n)]
+    vis[sx][sy] = True
+
+    def check(x, y, dx, dy):
+        if vis[x + dx][y + dy]:
+            return False
+
+        if x + dx < 0 or x + dx >= n:
+            return False
+
+        if y + dy < 0 or y + dy >= n:
+            return False
+
+        return True
+
+    q = Queue()
+    t = 0
+    q.put((t, sx, sy))
+    while not q.empty():
+        t, x, y = q.get()
+        if x == ex and y == ey:
+            return t
+
+        for nx, ny in zip(dx, dy):
+            if check(x, y, nx, ny):
+                q.put((t + 1, x + nx, y + ny))
+                vis[x + nx][y + ny] = True
+
+    return -1
+\end{lstlisting}
+
+对从$(1,1)$到$(2,1)$的情形，该算法输出4；从$(1,5)$到$(5,1)$的情形，该算法输出5。
 
 \end{spacing}
 
