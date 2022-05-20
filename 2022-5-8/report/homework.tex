@@ -345,6 +345,61 @@
 	\end{algorithmic}
 \end{algorithm}	
 
+\section{题12.6}
+
+\begin{algorithm}[htbp]
+	\caption{象棋覆盖问题}
+	\label{algo:cover}
+	\begin{algorithmic}[1]
+		\Procedure{SAT}{$i,m$}
+			\For{$k = 1 \to 8$}
+				\If{$x+dx[k]\ge0$ and $y+dy[k]\ge0$ and $x+dx[k]\le 8$ and $y+dy[k]\le 8$}
+					\State $step[i]\gets k$
+				\EndIf
+				\State $x\gets x+dx[k]$
+				\State $y\gets y+dy[k]$
+				\If{$x=x_0$ and $y=y_0$}
+					\State \Call{Output}{}
+					\State \Return
+				\Else
+					\If{$flag[x,y]=0$}
+						\State $flag[x,y]\gets 1$
+					\EndIf
+				\EndIf
+			\EndFor
+		\EndProcedure
+	\end{algorithmic}
+\end{algorithm}	
+
+\section{题12.7}
+
+按照3CNF-SAT问题的定义，可以简单地写出回溯算法~\ref{algo:3sat}。
+
+\begin{algorithm}[htbp]
+	\caption{3SAT问题}
+	\label{algo:3sat}
+	\begin{algorithmic}[1]
+		\Procedure{SAT}{$i,m$}
+			\If{$i>m$}
+				\State \Call{Output}{}
+			\EndIf
+			\For{$k \in \{False,True\}$}
+				\State $x[i]=k$
+				\For{$j=1\to m$}
+					\If{$c[j]=1$}
+						\State $t\gets True$
+						\State \Return
+					\EndIf
+				\EndFor
+				\If{$t\gets False$}
+					\State \Call{SAT}{$i+1,m$}
+				\EndIf
+			\EndFor
+		\EndProcedure
+	\end{algorithmic}
+\end{algorithm}	
+
+
 \section{题12.8}
 
 可以在枚举每种顶点序列，并且每一步以$w[x[i-1],x[j]]\ne \infty$为约束
