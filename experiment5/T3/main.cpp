@@ -50,29 +50,21 @@ state full()
 	return st;
 }
 
-template<>
-struct std::hash<state>
-{
-	std::size_t operator()(const state & s) const noexcept
-	{
-		return hashing(s);
-	}
-};
 
-unordered_map<state, int> steps{};
+unordered_map<uint32_t , int> steps{};
 
 void bfs()
 {
 	state s = full();
 	queue<state> q;
 	q.push(s);
-	steps[s] = 1;
+	steps[hashing(s)] = 1;
 	while (!q.empty())
 	{
 		auto t = q.front();
 		q.pop();
 
-		if (steps[t] > 6)
+		if (steps[hashing(t)] > 6)
 		{
 			break;
 		}
@@ -82,12 +74,12 @@ void bfs()
 			for (int j = 0; j < 5; j++)
 			{
 				auto f = turn(t, i, j);
-				if (steps[f] > 0)
+				if (steps[hashing(f)] > 0)
 				{
 					continue;
 				}
 
-				steps[f] = steps[t] + 1;
+				steps[hashing(f)] = steps[hashing(t)] + 1;
 				q.push(f);
 			}
 		}
@@ -111,7 +103,7 @@ int main()
 				s[i].set(j, line[j] == '1');
 			}
 		}
-		cout << steps[s] - 1 << "\n";
+		cout << steps[hashing(s)] - 1 << "\n";
 	}
 	return 0;
 }
