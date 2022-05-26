@@ -1,0 +1,287 @@
+\documentclass[a4paper,twoside]{article}
+\usepackage{blindtext}  
+\usepackage{geometry}
+
+% Chinese support
+\usepackage[UTF8, scheme = plain]{ctex}
+
+% Page margin layout
+\geometry{left=2.3cm,right=2cm,top=2.5cm,bottom=2.0cm}
+
+
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{geometry}
+\usepackage{amsmath}
+\usepackage{float}
+\usepackage{hyperref}
+
+\usepackage{graphics}
+\usepackage{graphicx}
+\usepackage{subfigure}
+\usepackage{epsfig}
+\usepackage{float}
+
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+
+\usepackage{booktabs}
+\usepackage{threeparttable}
+\usepackage{longtable}
+\usepackage{listings}
+\usepackage{tikz}
+\usepackage{multicol}
+
+% cite package, to clean up citations in the main text. Do not remove.
+\usepackage{cite}
+
+\usepackage{color,xcolor}
+
+%% The amssymb package provides various useful mathematical symbols
+\usepackage{amssymb}
+%% The amsthm package provides extended theorem environments
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{enumerate}
+\usepackage{enumitem}
+\usepackage{listings}
+
+\usepackage{indentfirst}
+\setlength{\parindent}{2em} % Make two letter space in the first paragraph
+\usepackage{setspace}
+\linespread{1.5} % Line spacing setting
+\usepackage{siunitx}
+\setlength{\parskip}{0.5em} % Paragraph spacing setting
+
+% \usepackage[contents =22920202204622, scale = 10, color = black, angle = 50, opacity = .10]{background}
+
+\renewcommand{\figurename}{图}
+\renewcommand{\lstlistingname}{代码} 
+\renewcommand{\tablename}{表格}
+\renewcommand{\contentsname}{目录}
+\floatname{algorithm}{算法}
+
+\graphicspath{ {images/} }
+
+%%%%%%%%%%%%%
+\newcommand{\StudentNumber}{22920202204622}  % Fill your student number here
+\newcommand{\StudentName}{熊恪峥}  % Replace your name here
+\newcommand{\PaperTitle}{作业（十）}  % Change your paper title here
+\newcommand{\PaperType}{算法设计与分析} % Replace the type of your report here
+\newcommand{\Date}{2022年5月25日}
+\newcommand{\College}{信息学院}
+\newcommand{\CourseName}{算法设计与分析}
+%%%%%%%%%%%%%
+
+%% Page header and footer setting
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\pagestyle{fancy}
+\fancyhf{}
+% This requires the document to be twoside
+\fancyhead[LO]{\texttt{\StudentName }}
+\fancyhead[LE]{\texttt{\StudentNumber}}
+\fancyhead[C]{\texttt{\PaperTitle }}
+\fancyhead[R]{\texttt{第{\thepage}页，共\pageref*{LastPage}页}}
+
+
+\title{\PaperTitle}
+\author{\StudentName}
+\date{\Date}
+
+\lstset{
+	basicstyle          =   \sffamily,          % 基本代码风格
+	keywordstyle        =   \bfseries,          % 关键字风格
+	commentstyle        =   \rmfamily\itshape,  % 注释的风格，斜体
+	stringstyle         =   \ttfamily,  % 字符串风格
+	flexiblecolumns,                % 别问为什么，加上这个
+	numbers             =   left,   % 行号的位置在左边
+	showspaces          =   false,  % 是否显示空格，显示了有点乱，所以不现实了
+	numberstyle         =   \zihao{-5}\ttfamily,    % 行号的样式，小五号，tt等宽字体
+	showstringspaces    =   false,
+	captionpos          =   t,      % 这段代码的名字所呈现的位置，t指的是top上面
+	frame               =   lrtb,   % 显示边框
+}
+
+\lstdefinestyle{PythonStyle}{
+	language        =   Python, % 语言选Python
+	basicstyle      =   \zihao{-5}\ttfamily,
+	numberstyle     =   \zihao{-5}\ttfamily,
+	keywordstyle    =   \color{blue},
+	keywordstyle    =   [2] \color{teal},
+	stringstyle     =   \color{magenta},
+	commentstyle    =   \color{red}\ttfamily,
+	breaklines      =   true,   % 自动换行，建议不要写太长的行
+	columns         =   fixed,  % 如果不加这一句，字间距就不固定，很丑，必须加
+	basewidth       =   0.5em,
+}
+
+\lstdefinestyle{CppStyle}{
+	language        =   c++,
+	basicstyle      =   \zihao{-5}\ttfamily,
+	numberstyle     =   \zihao{-5}\ttfamily,
+	keywordstyle    =   \color{blue},
+	keywordstyle    =   [2] \color{teal},
+	stringstyle     =   \color{magenta},
+	commentstyle    =   \color{red}\ttfamily,
+	breaklines      =   true,   % 自动换行，建议不要写太长的行
+	columns         =   fixed,  % 如果不加这一句，字间距就不固定，很丑，必须加
+	basewidth       =   0.5em,
+}
+
+\algnewcommand\algorithmicinput{\textbf{Input:}}
+\algnewcommand\algorithmicoutput{\textbf{Output:}}
+\algnewcommand\Input{\item[\algorithmicinput]}%
+\algnewcommand\Output{\item[\algorithmicoutput]}%
+
+\usetikzlibrary{positioning, shapes.geometric}
+
+\begin{document}
+	
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\makeatletter % change default title style
+\renewcommand*\maketitle{%
+	\begin{center} 
+		\bfseries  % title 
+		{\LARGE \@title \par}  % LARGE typesetting
+		\vskip 1em  %  margin 1em
+		{\global\let\author\@empty}  % no author information
+		{\global\let\date\@empty}  % no date
+		\thispagestyle{empty}   %  empty page style
+	\end{center}%
+	\setcounter{footnote}{0}%
+}
+\makeatother
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	
+	
+\thispagestyle{empty}
+
+\vspace*{1cm}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=4.0cm]{logo.png}
+\end{figure}
+
+\vspace*{1cm}
+
+\begin{center}
+	\Huge{\textbf{\PaperType}}
+	
+	\Large{\PaperTitle}
+\end{center}
+
+\vspace*{1cm}
+
+\begin{table}[h]
+	\centering	
+	\begin{Large}
+		\renewcommand{\arraystretch}{1.5}
+		\begin{tabular}{p{3cm} p{5cm}<{\centering}}
+			姓\qquad 名 & \StudentName  \\
+			\hline
+			学\qquad号 & \StudentNumber \\
+			\hline
+			日\qquad期 & \Date  \\
+			\hline
+			学\qquad院 & \College  \\
+			\hline
+			课程名称 & \CourseName  \\
+			\hline
+		\end{tabular}
+	\end{Large}
+\end{table}
+
+\newpage
+
+\title{
+	\Large{\textcolor{black}{\PaperTitle}}
+}
+	
+	
+\maketitle
+	
+\tableofcontents
+ 
+\newpage
+\setcounter{page}{1}
+
+\begin{spacing}{1.2}
+
+\section{题11.2}
+
+\begin{proof}
+	先证充分性。
+
+	若$LongestPathLength$为多项式时间可解的问题，设时间复杂度为$\mathcal{O}(P(n))$，则
+	解决$LongestPath$问题可等价于判定
+	\[
+		LongestPathLength(G,u,v) \ne \infty
+	\]
+	这个方法的时间复杂度就是$\mathcal{O}(P(n)+1)=\mathcal{O}(P(n))$，因此$LongestPath$问题多项式
+	时间可解。
+
+	再证必要性。
+
+	若$LongestPath$为多项式时间可解的问题，设时间复杂度为$\mathcal{O}(P(n))$，则算法\ref{algo:lp}
+	可以解决$LongestPathLength$问题。
+	\begin{algorithm}[htbp]
+		\caption{解决$LongestPathLength$}
+		\label{algo:lp}
+		\begin{algorithmic}[1]
+			\Procedure{LongestPathLength}{$p,k,n$}
+				\For{$i=1\to |\mathcal{V}|$}
+					\If{$\mathop{not}$ \Call{LongestPath}{G,u,v,i}}
+						\State \Return $i-1$
+					\EndIf
+				\EndFor
+			\EndProcedure
+		\end{algorithmic}
+	\end{algorithm}	
+
+	$LongestPathLength$的内层循环次数不超过$|\mathcal{V}|$，它的时间复杂度是$\mathcal{O}(|\mathcal{V}|P(n))$，
+	因此是多项式时间可解的。
+
+\end{proof}
+
+\section{题11.3}
+
+假设TSP问题是多项式时间可解的，求出回路的权值只需要在算法给出的顶点序列中累加对应边的权值。
+如算法\ref{algo:tsplen}。
+
+\begin{algorithm}[htbp]
+	\caption{解决$TSPLength$}
+	\label{algo:tsplen}
+	\begin{algorithmic}[1]
+		\Procedure{TSPLength}{$G$}
+			\State $\mathcal{V}=TSP(G)$
+			\State $len\gets 0$
+			\For{$i=1\to |\mathcal{V}|$}
+				\State $len \gets len+w[\mathcal{V}[i],\mathcal{V}[i-1]]$
+			\EndFor
+			\State $len\gets len+w[\mathcal{V}[|\mathcal{V}|-1],0]$
+			\State \Return $len$
+		\EndProcedure
+	\end{algorithmic}
+\end{algorithm}	
+
+\section{题11.4}
+
+\textbf{优化问题：}找出一条从$u$到$u$的简单回路，使得这条回路的权值和$w$最大。
+
+\textbf{判定问题：}是否存在一条从$u$到$u$的简单回路，这条回路的权值和至少为$w$。
+
+它的语言如\eqref{eqn:langlongest}。
+
+\begin{equation}
+	\label{eqn:langlongest}
+	\begin{aligned}
+		LongestPath=\{ <G,u,w>: G(V,E)\mbox{是无向图}, u\in V, \mbox{存在从}u\mbox{开始的回路，它的权值和不少于}w \}
+	\end{aligned}
+\end{equation}
+
+
+\end{spacing}
+
+\end{document}
