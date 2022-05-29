@@ -281,6 +281,63 @@
 	\end{aligned}
 \end{equation}
 
+\section{题11.7}
+
+若$HamCycle$多项式时间可解，设时间复杂度是$\mathcal{O}(P(n))$，注意到哈密顿回路的每个顶点都连着两条边。
+可以对顶点$v$枚举所有与之相连的边集合$E_v$，找出两条边使得$G'(V,(E-E_v)\cup \{e_i,e_j\})$是哈密顿图。并
+沿着这两条边的另一顶点枚举，直到对所有顶点枚举完成。所有找出的边就是哈密顿回路的边。
+这个过程的时间复杂度是$\mathcal{O}(|V|^2P(n))$，也是多项式的。之后就可以沿着这些边列出所有的顶点。
+
+
+\section{题11.16}
+
+先证01整数规划问题是NP的。
+\begin{proof}
+	01整数规划问题的判定问题是\emph{给定矩阵$A_{mn}$、$x$和$b$，是否有$Ax\le b$}。
+	
+	给定矩阵$A_{mn}$、$x$和$b$，判断是否$Ax\le b$需要进行一次矩阵乘法和$n$次整数比较。
+	可以在多项式时间完成。
+
+	因此01整数规划问题是NP的。
+\end{proof}
+
+然后证明01整数规划问题是NP-Hard的。要证01整数规划问题是NP-Hard的，就要证明存在一个NP-Complete问题，它可以多项式时间
+约简到01整数规划问题。可以证明01INT$\le_p$3-CNF-SAT
+\begin{proof}
+由于$x_i\in \{0,1\}$,有
+\[
+	0\le x_i\le 1
+\]
+则每一个合取范式可以根据以下规则写成不等式$\sum_i c_i \ge 1$：
+\begin{itemize}
+	\item 以原变量形式出现的$x_i$以$c_i=x_i$的形式出现在不等式里
+	\item 以反变量形式出现的$x_j$以$c_i=1-x_j$的形式出现在不等式里
+\end{itemize}
+为了变为小于号，不等式两边加上负号，有\eqref{eqn:01int_primary}
+\begin{equation}
+	\label{eqn:01int_primary}
+	-\sum_i c_i \le -1
+\end{equation}
+以上过程可以在多项式时间内完成。将\eqref{eqn:01int_primary}整理成按照题目所给的形式如\eqref{eqn:01int}
+\begin{equation}
+	\label{eqn:01int}
+	\begin{aligned}
+		A_{mn}&=\left( a_{ij}=\begin{cases}
+			-1 & \exists x_j \in CNF_i\\
+			1 & \exists \bar{x_j} \in CNF_i\\
+			0 & otherwise
+		\end{cases} 
+		\right) \\
+		b&=\left( b_i=-1+\sum_j \mathop{\max}(0,a_{ij}) \right)
+	\end{aligned}
+\end{equation}
+这个过程显然能在$\mathcal{O}(P(m,n))$的时间内完成。
+因此该约简过程可以在多项式时间内完成。
+
+因此，01整数规划问题是NP-Hard的。
+\end{proof}
+
+综上，01整数规划问题是NP-Complete的。
 
 \end{spacing}
 
